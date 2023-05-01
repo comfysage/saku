@@ -11,14 +11,21 @@ macro_rules! create_listener {
             create_listener!(on $r; $a, Some($t));
         )+
     };
+    (create $r:ident, $c:expr; $( { $a:expr, $t:expr } ),+ $(,)?) => {
+        let mut $r = ArgListener::new($c, None);
+        create_listener!(add $r;
+        $(
+            { $a, $t },
+        )+
+        );
+    };
 }
 
 pub fn setup() -> Result<ArgListener, String> {
     let mut main_listener = ArgListener::new("yuki", None);
 
-    let mut pkg_listener = ArgListener::new("pkg", None);
     /* $ yuki pkg */
-    create_listener!(pkg_listener,
+    create_listener!(create pkg_listener, "pkg";
         /* $ yuki pkg add */
         { "add", Task::Add },
         /* $ yuki pkg remove */
