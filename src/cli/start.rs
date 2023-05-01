@@ -3,13 +3,13 @@ use super::commands::ArgListener;
 use crate::task::Task;
 
 macro_rules! create_listener {
-    ($r:ident, $a:expr, $t:expr) => {
-        ArgListener::new($a, $t,).on(&mut $r)?;
+    (on $r:ident; $a:expr, $t:expr) => {
+        ArgListener::new($a, $t).on(&mut $r)?;
     };
-    ($r:ident, $( { $a:expr, $t:expr } ),+ $(,)?) => {
+    (add $r:ident; $( { $a:expr, $t:expr } ),+ $(,)?) => {
         $(
-            create_listener!($r, $a, Some($t));
-        )*
+            create_listener!(on $r; $a, Some($t));
+        )+
     };
 }
 
@@ -27,15 +27,12 @@ pub fn setup() -> Result<ArgListener, String> {
 
     main_listener.add_listener(pkg_listener)?;
 
-    /* $ yuki add */
-    /* create_listener!(main_listener, "add", Some(Task::Install));
-    /* $ yuki remove */
-    create_listener!(main_listener, "remove", Some(Task::Uninstall));
-    /* $ yuki show */
-    create_listener!(main_listener, "show", Some(Task::Show)); */
-    create_listener!(main_listener,
+    create_listener!(add main_listener;
+        /* $ yuki add */
         { "add", Task::Install },
+        /* $ yuki remove */
         { "remove", Task::Uninstall },
+        /* $ yuki show */
         { "show", Task::Show },
     );
 
