@@ -1,5 +1,5 @@
 use crate::task::Task;
-
+use crate::Error;
 use super::args::Args;
 
 pub struct ArgListener {
@@ -9,7 +9,7 @@ pub struct ArgListener {
 }
 
 impl ArgListener {
-    pub fn init(&self, args: &mut Args) -> Result<(), String> {
+    pub fn init(&self, args: &mut Args) -> Result<(), Error> {
         if let Some(task) = &self.task {
             task.init(args.get())?;
             return Ok(());
@@ -20,7 +20,7 @@ impl ArgListener {
                 self.listeners[i].init(args)?;
             }
         }
-        Err("no match found".to_string())
+        Err(Error::NotFound(format!("no match found")))
     }
     pub fn new(word: &str, task: Option<Task>) -> Self {
         Self {
@@ -29,11 +29,11 @@ impl ArgListener {
             listeners: vec![],
         }
     }
-    pub fn add_listener(&mut self, listener: ArgListener) -> Result<(), String> {
+    pub fn add_listener(&mut self, listener: ArgListener) -> Result<(), Error> {
         self.listeners.push(listener);
         Ok(())
     }
-    pub fn on(self, root: &mut ArgListener) -> Result<(), String> {
+    pub fn on(self, root: &mut ArgListener) -> Result<(), Error> {
         root.add_listener(self)?;
         Ok(())
     }

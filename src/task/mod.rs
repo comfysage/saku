@@ -1,3 +1,10 @@
+use crate::Error;
+
+use self::{show::cli_show, install::cli_install};
+
+pub mod show;
+pub mod install;
+
 type Tasks = Vec<Task>;
 
 pub enum Task {
@@ -22,12 +29,15 @@ pub enum Task {
     RemoveClone,
     RemovePack,
 
+    ConfigInit,
+    ConfigCreate,
+
     Show,
     List,
 }
 
 impl Task {
-    pub fn init(&self, args: Vec<String>) -> Result<(), String> {
+    pub fn init(&self, args: Vec<String>) -> Result<(), Error> {
         let tasks = Task::expand(self);
         Task::run_all(tasks, &args)?;
         Ok(())
@@ -45,17 +55,19 @@ impl Task {
             Task::RemovePack => vec![Task::RemovePack],
             Task::Show => vec![Task::Show],
             Task::List => vec![Task::List],
+            Task::ConfigInit => vec![Task::ConfigInit],
+            Task::ConfigCreate => vec![Task::ConfigInit],
         }
     }
-    pub fn run_all(tasks: Tasks, args: &Vec<String>) -> Result<(), String> {
+    pub fn run_all(tasks: Tasks, args: &Vec<String>) -> Result<(), Error> {
         for task in tasks {
             Task::run(task, args)?;
         }
         Ok(())
     }
-    pub fn run(task: Task, args: &Vec<String>) -> Result<(), String> {
+    pub fn run(task: Task, args: &Vec<String>) -> Result<(), Error> {
         match task {
-            Task::Install => todo!(),
+            Task::Install => cli_install(args.clone()),
             Task::Uninstall => todo!(),
             Task::Add => todo!(),
             Task::Remove => todo!(),
@@ -64,9 +76,11 @@ impl Task {
             Task::Pack => todo!(),
             Task::RemoveClone => todo!(),
             Task::RemovePack => todo!(),
-            Task::Show => todo!(),
+            Task::Show => cli_show(args.clone()),
             Task::List => todo!(),
-        };
+            Task::ConfigInit => todo!(),
+            Task::ConfigCreate => todo!(),
+        }?;
         Ok(())
     }
 }
