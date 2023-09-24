@@ -1,11 +1,16 @@
-pub static HOME: &str = std::env::var("HOME").unwrap().as_str();
+use lazy_static::lazy_static;
 
-pub static HAYASHI_ROOT: &str = format!("{}{}", HOME, "/.hayashi").as_str();
-pub static CONFIG_NAME: &str = ".hayashi.yaml";
-pub static STORE_NAME: &str = ".store.yaml";
+lazy_static! {
+    pub static ref HOME: String = std::env::var("HOME").unwrap();
 
-pub static REPO_ROOT: &str = format!("{}{}", HAYASHI_ROOT, "/repo").as_str();
-pub static PKG_ROOT: &str = format!("{}{}", HAYASHI_ROOT, "/pkg").as_str();
-pub static PACK_ROOT: &str = format!("{}{}", HAYASHI_ROOT, "/pack").as_str();
+    pub static ref HAYASHI_ROOT: String = format!("{}{}", *HOME, "/.hayashi");
 
-pub static REPO_PKG: &str = "yuki.yaml";
+    pub static ref CONFIG_NAME: String = ".hayashi.yaml".to_string();
+    pub static ref STORE_NAME: String = ".store.yaml".to_string();
+
+    pub static ref REPO_ROOT: String = format!("{}{}", *HAYASHI_ROOT, "/repo");
+    pub static ref PKG_ROOT: String = format!("{}{}", *HAYASHI_ROOT, "/pkg");
+    pub static ref PACK_ROOT: String = format!("{}{}", *HAYASHI_ROOT, "/pack");
+
+    pub static ref REPO_PKG: String = "yuki.yaml".to_string();
+}

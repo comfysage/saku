@@ -10,18 +10,18 @@ pub fn exists(path: &str) -> bool {
 }
 
 pub fn config() -> String {
-	filepath::join(HAYASHI_ROOT, CONFIG_NAME)
+	filepath::join(&HAYASHI_ROOT, &CONFIG_NAME)
 }
 
 pub fn store_file() -> String {
-	filepath::join(HAYASHI_ROOT, STORE_NAME)
+	filepath::join(&HAYASHI_ROOT, &STORE_NAME)
 }
 
 pub fn gr(name: &str) -> String {
 	if name.len() == 0 {
 		panic!("argument for group name was nil");
 	}
-	filepath::join(PKG_ROOT, name)
+	filepath::join(&PKG_ROOT, name)
 }
 
 fn pkg_name(name: &str) -> String {
@@ -54,11 +54,12 @@ pub fn pkg_exists(gr: &str, name: &str) -> bool {
 
 pub fn path_determine(path: String) -> Result<(String, bool), Error> {
 	let mut dir = false;
-	let p;
+	let p: &str;
 
 	if path.starts_with(".") || path.starts_with("/") {
 		// path is either relative or absolute
-		p = &filepath::extend(&path)?;
+        let path_bind = filepath::extend(&path)?;
+        p = &path_bind;
 
 		// path points to either a file or a directory
 		if filepath::is_dir(p) {
@@ -69,7 +70,8 @@ pub fn path_determine(path: String) -> Result<(String, bool), Error> {
 	}
 
 	// path is a name
-	p = &pkg_search(&path)?;
+    let path_bind = pkg_search(&path)?;
+    p = &path_bind;
 
 	Ok(( p.to_string(), false ))
 }
@@ -79,9 +81,10 @@ pub fn pkg_search(name: &str) -> Result<String, Error> {
 		return Ok(path_pkg("core", name));
 	}
 
-	for d in fs::read_dir(PKG_ROOT)? {
+	for d in fs::read_dir(&*PKG_ROOT)? {
         let d = d?;
-        let d_path = match d.path().to_str() {
+        let d_path_bind = d.path();
+        let d_path = match d_path_bind.to_str() {
             Some(s) => Ok(s),
             None => Err(Error::Unexpected),
         }?;
@@ -102,14 +105,14 @@ pub fn repo_pkg(path: &str) -> String {
 	if path.len() == 0 {
 		panic!("argument for path was nil")
 	}
-	filepath::join(path, REPO_PKG)
+	filepath::join(path, &REPO_PKG)
 }
 
 pub fn repo(name: &str) -> String {
 	if name.len() == 0 {
 		panic!("argument for repo name was nil")
 	}
-	filepath::join(REPO_ROOT, name)
+	filepath::join(&REPO_ROOT, name)
 }
 
 pub fn repo_file(name: &str, path: &str) -> String {
@@ -123,7 +126,7 @@ pub fn pack_dir(dir: &str) -> String {
 	if dir.len() == 0 {
 		panic!("argument for type dir was nil")
 	}
-	filepath::join(PACK_ROOT, dir)
+	filepath::join(&PACK_ROOT, dir)
 }
 
 pub fn pack_file(dir: &str, path: &str) -> String {
