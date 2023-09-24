@@ -1,8 +1,8 @@
 use crate::{Error, util};
 
-use self::{cmd::{clone_cmd, fetch_cmd, log_cmd, pack_cmd}, run::{run_one, run}};
+use self::{cmd::{clone_cmd, fetch_cmd, log_cmd, pack_cmd, curl_cmd}, run::{run_one, run}};
 
-mod cmd;
+pub mod cmd;
 mod run;
 
 pub fn clone(url: &str, name: &str) -> Result<(), Error> {
@@ -19,6 +19,10 @@ pub fn changelof(name: &str) -> Result<(), Error> {
 
 pub fn pack(name: &str, path: &str, prefix: &str) -> Result<(), Error> {
   run_one(pack_cmd(name, path, prefix)?, &util::constants::PACK_ROOT)
+}
+
+pub fn curl(url: &str, file: &str) -> Result<(), Error> {
+  run_one(curl_cmd(url, file), &util::constants::HAYASHI_ROOT)
 }
 
 pub fn run_in_repo(name: &str, cmd: Vec<String>) -> Result<(), Error> {

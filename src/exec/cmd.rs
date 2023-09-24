@@ -40,3 +40,11 @@ pub fn pack_cmd(name: &str, path: &str, prefix: &str) -> Result<String, Error> {
     return Ok(install_cmd(&src, &dst, 0644))
   }
 }
+
+pub fn ln_cmd(target: &str, file: &str) -> String {
+    format!("ln -s {target} {file}")
+}
+
+pub fn curl_cmd(url: &str, file: &str) -> String {
+    format!("curl -fsSL {url} -o {file}")
+}
