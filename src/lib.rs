@@ -46,5 +46,4 @@ impl From<io::Error> for Error {
 pub mod util;
 pub mod exec;
 pub mod pkg;
-pub mod task;
 pub mod cli;

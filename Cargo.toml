@@ -9,3 +9,6 @@ license = "MIT OR Apache-2.0"
 [[bin]]
 name = "yki"
 path = "src/main.rs"
+
+[dependencies]
+clap = "4.4.4"
