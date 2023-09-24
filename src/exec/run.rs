@@ -2,26 +2,27 @@ use std::process::Stdio;
 use crate::Error;
 use std::process::Command;
 
-pub fn run(cmd: Vec<String>, pwd: String) -> Result<(), Error> {
-    let mut cwd = pwd;
-    drop(pwd);
+pub fn run(cmd: Vec<String>, pwd: &str) -> Result<(), Error> {
+    let mut cwd: String = pwd.to_string();
     for c in cmd {
-        let el: Vec<&str> = c.splitn(2, ' ').collect();
+        let line = c.clone();
+        let elements = line.splitn(2, ' ');
+        let el: Vec<&str> = elements.collect();
         if el[0] == "cd" {
-            // el[0] = cwd;
             cwd = el[1].to_string();
             continue;
         }
         drop(el);
-        let cmd = Command::new("bash").arg("-c").arg(c);
-        cmd.current_dir(cwd);
+        let cmd: &mut Command = &mut Command::new("bash");
+        cmd.arg("-c").arg(line);
+        cmd.current_dir(cwd.as_str());
 
-        let child = cmd.stdout(Stdio::piped()).stderr(Stdio::piped()).spawn()?;
+        let _ = cmd.stdout(Stdio::piped()).stderr(Stdio::piped()).spawn()?;
     }
     Ok(())
 }
 
-pub fn run_one(cmd: String, pwd: String) -> Result<(), Error> {
+pub fn run_one(cmd: String, pwd: &str) -> Result<(), Error> {
     run(vec![cmd], pwd)
 }
 

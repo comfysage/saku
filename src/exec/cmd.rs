@@ -16,7 +16,7 @@ pub fn log_cmd() -> String {
 }
 
 pub fn install_cmd(src: &str, dst: &str, perm: i64) -> String {
-  let mode = "";
+  let mode = perm.to_string();
   format!("install -m {mode} {src} {dst}")
 }
 
