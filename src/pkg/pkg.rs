@@ -2,6 +2,9 @@ use crate::pkg::pack::Pack;
 use crate::util::{path, self, filepath};
 use crate::Error;
 
+use serde::{Serialize, Deserialize};
+
+#[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub struct Pkg {
     pub name: String,
     pub desc: String,
@@ -16,12 +19,13 @@ pub struct Pkg {
 // meta
 impl Pkg {
     pub fn fill(&mut self) -> Result<(), Error> {
-        self.infer_group(self.get_path()?)?;
+        let local_path = self.get_path()?;
+        self.infer_group(local_path)?;
         // infer url
         let mut finish = false;
         let mut foundslash = false;
         let mut founddb = false;
-        self.url.chars().into_iter().for_each(|s| {
+        self.url.clone().chars().into_iter().for_each(|s| {
             if finish {
                 return;
             }
@@ -66,7 +70,8 @@ impl Pkg {
         let cwd = util::cli::get_cwd()?;
         let abspath = filepath::abs(&filepath::join(&cwd, &path));
 
-        let sp = abspath.split("/").collect::<Vec<&str>>();
+        let abs_bind = abspath?;
+        let sp = abs_bind.split("/").collect::<Vec<&str>>();
         if sp.len() < 2 {
             return Err(make_err!(NotFound, "path to pkg not long enough"));
         }
@@ -74,8 +79,8 @@ impl Pkg {
         Ok(())
     }
     pub fn get_path(&mut self) -> Result<String, Error> {
-        match self.path {
-            Some(s) => Ok(s),
+        match &self.path {
+            Some(s) => Ok(s.to_string()),
             None => Ok(path::path_pkg(&self.group, &self.name)),
         }
     }
@@ -86,11 +91,11 @@ impl Pkg {
 
 // data
 impl Pkg {
-    pub fn from_string() -> Pkg {
-        todo!()
+    pub fn from_string(str: String) -> Result<Pkg, Error> {
+        serde_yaml::from_str(&str).map_err(|_| make_err!())
     }
-    pub fn to_string(&self) -> String {
-        todo!()
+    pub fn to_string(&self) -> Result<String, Error> {
+        serde_yaml::to_string(self).map_err(|_| make_err!())
     }
 }
 
