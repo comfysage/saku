@@ -16,6 +16,21 @@ pub struct Pkg {
     path: Option<String>,
 }
 
+impl Pkg {
+    pub fn new(name: &str, url: &str) -> Self {
+        Self {
+            name: format!("{name}"),
+            url: format!("{url}"),
+            desc: format!(""),
+            group: format!(""),
+            install: vec![],
+            update: vec![],
+            pack: vec![],
+            path: None,
+        }
+    }
+}
+
 // meta
 impl Pkg {
     pub fn fill(&mut self) -> Result<(), Error> {
