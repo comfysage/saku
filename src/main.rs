@@ -1,9 +1,10 @@
 use yuki::{Result, Error, make_err };
+use yuki::cli;
 use yuki;
 
 use clap::{arg, Command};
 
-fn cli() -> Command {
+fn get_commands() -> Command {
     Command::new("yki")
         .about("a tiny distro-independent package manager written in Go.")
         .subcommand_required(true)
@@ -47,14 +48,14 @@ fn cli() -> Command {
 }
 
 fn main() -> Result<()> {
-    let matches = cli().get_matches();
+    let matches = get_commands().get_matches();
 
     match matches.subcommand() {
         Some(("config", sub_matches)) => {
             let stash_command = sub_matches.subcommand().unwrap_or(("init", sub_matches));
             match stash_command {
-                ("init", _) => yuki::cli::config::init(),
-                ("create", _) => yuki::cli::config::create(),
+                ("init", _) => cli::config::init(),
+                ("create", _) => cli::config::create(),
                 (&_, _) => Err(yuki::Error::Unexpected),
             }
         }
@@ -90,7 +91,7 @@ fn main() -> Result<()> {
             }
             paths
                 .iter()
-                .map(|name| yuki::cli::install::install(name))
+                .map(|name| cli::install::install(name))
                 .collect()
         }
         Some(("remove", sub_matches)) => {
@@ -113,7 +114,7 @@ fn main() -> Result<()> {
             }
             paths
                 .iter()
-                .map(|name| yuki::cli::show::show(name))
+                .map(|name| cli::show::show(name))
                 .collect()
         }
         _ => unreachable!(), // If all subcommands are defined above, anything else is unreachable!()
