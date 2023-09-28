@@ -22,9 +22,9 @@ pub fn get_pkg(name: &str) -> Result<Pkg, Error> {
     let (path, is_dir) = util::path::path_determine(name.to_string())?;
 
     if is_dir {
-        let pkg_path = util::path::repo_pkg(&path);
+        let pkg_path = util::path::repo_seed(&path);
         let mut pkg = get_pkg_from_path(&pkg_path)?;
-        store_repo_pkg(&mut pkg)?;
+        store_repo_seed(&mut pkg)?;
 
         return Ok(pkg);
     }
@@ -48,7 +48,7 @@ pub fn save_pkg(pkg: &Pkg) -> Result<(), Error> {
     Ok(())
 }
 
-fn store_repo_pkg(pkg: &mut Pkg) -> Result<(), Error> {
+fn store_repo_seed(pkg: &mut Pkg) -> Result<(), Error> {
     pkg.group = format!("repo");
 
     let _ = util::io::mkdir(util::path::gr("repo"))?;

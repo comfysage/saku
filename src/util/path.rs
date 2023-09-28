@@ -1,6 +1,6 @@
 use std::fs;
 
-use super::constants::{PACK_ROOT, PKG_ROOT, HAYASHI_ROOT, CONFIG_NAME, STORE_NAME, REPO_ROOT, REPO_PKG};
+use super::constants::{ROOT_DIR, PKG_DIR, HAYASHI_DIR, CONFIG_NAME, STORE_NAME, REPO_DIR, REPO_SEED};
 
 use crate::Error;
 use super::filepath;
@@ -10,18 +10,18 @@ pub fn exists(path: &str) -> bool {
 }
 
 pub fn config() -> String {
-	filepath::join(&HAYASHI_ROOT, &CONFIG_NAME)
+	filepath::join(&HAYASHI_DIR, &CONFIG_NAME)
 }
 
 pub fn store_file() -> String {
-	filepath::join(&HAYASHI_ROOT, &STORE_NAME)
+	filepath::join(&HAYASHI_DIR, &STORE_NAME)
 }
 
 pub fn gr(name: &str) -> String {
 	if name.len() == 0 {
 		panic!("argument for group name was nil");
 	}
-	filepath::join(&PKG_ROOT, name)
+	filepath::join(&PKG_DIR, name)
 }
 
 fn pkg_name(name: &str) -> String {
@@ -81,7 +81,7 @@ pub fn pkg_search(name: &str) -> Result<String, Error> {
 		return Ok(path_pkg("core", name));
 	}
 
-	for d in fs::read_dir(&*PKG_ROOT)? {
+	for d in fs::read_dir(&*PKG_DIR)? {
         let d = d?;
         let d_path_bind = d.path();
         let d_path = match d_path_bind.to_str() {
@@ -101,18 +101,18 @@ pub fn pkg_search(name: &str) -> Result<String, Error> {
 	Err(make_err!(NotFound, "pkg not found."))
 }
 
-pub fn repo_pkg(path: &str) -> String {
+pub fn repo_seed(path: &str) -> String {
 	if path.len() == 0 {
 		panic!("argument for path was nil")
 	}
-	filepath::join(path, &REPO_PKG)
+	filepath::join(path, &REPO_SEED)
 }
 
 pub fn repo(name: &str) -> String {
 	if name.len() == 0 {
 		panic!("argument for repo name was nil")
 	}
-	filepath::join(&REPO_ROOT, name)
+	filepath::join(&REPO_DIR, name)
 }
 
 pub fn repo_file(name: &str, path: &str) -> String {
@@ -126,7 +126,7 @@ pub fn pack_dir(dir: &str) -> String {
 	if dir.len() == 0 {
 		panic!("argument for type dir was nil")
 	}
-	filepath::join(&PACK_ROOT, dir)
+	filepath::join(&ROOT_DIR, dir)
 }
 
 pub fn pack_file(dir: &str, path: &str) -> String {

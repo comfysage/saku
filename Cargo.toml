@@ -1,13 +1,13 @@
 [package]
-name = "yuki"
+name = "saku"
 version = "0.1.0"
 edition = "2021"
 readme = "README.md"
-repository = "https://github.com/crispybaccoon/yuki"
+repository = "https://github.com/crispybaccoon/saku"
 license = "MIT OR Apache-2.0"
 
 [[bin]]
-name = "yki"
+name = "saku"
 path = "src/main.rs"
 
 [dependencies]

@@ -9,7 +9,7 @@ pub struct Config {}
 
 impl Config {
     pub fn new() -> Result<Self> {
-        if let Some(path) = directories::ProjectDirs::from("dev", "crispybaccoon", "yuki") {
+        if let Some(path) = directories::ProjectDirs::from("dev", "crispybaccoon", "saku") {
             let content = fs::read_to_string(path.config_dir())?;
             let config: Self = serde_yaml::from_str(&content).unwrap_or(Self::default());
             Ok(config)

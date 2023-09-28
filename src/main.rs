@@ -1,13 +1,13 @@
-use yuki;
-use yuki::cli;
-use yuki::pkg::pkg::Pkg;
-use yuki::util::msg;
-use yuki::{make_err, Error, Result};
+use saku;
+use saku::cli;
+use saku::pkg::pkg::Pkg;
+use saku::util::msg;
+use saku::{make_err, Error, Result};
 
 use clap::{arg, Command};
 
 fn get_commands() -> Command {
-    Command::new("yki")
+    Command::new("saku")
         .about("a tiny distro-independent package manager written in Go.")
         .subcommand_required(true)
         .arg_required_else_help(true)
@@ -17,8 +17,8 @@ fn get_commands() -> Command {
                 .about("Manage global configuration")
                 .subcommand_required(true)
                 .arg_required_else_help(true)
-                .subcommand(Command::new("init").about("Setup hayashi"))
-                .subcommand(Command::new("create").about("Setup .hayashi.yaml")),
+                .subcommand(Command::new("init").about("Setup saku"))
+                .subcommand(Command::new("create").about("Setup saku.yaml")),
         )
         .subcommand(
             Command::new("pkg")
@@ -70,7 +70,7 @@ fn main() -> Result<()> {
             match stash_command {
                 ("init", _) => cli::config::init(),
                 ("create", _) => cli::config::create(),
-                (&_, _) => Err(yuki::Error::Unexpected),
+                (&_, _) => Err(Error::Unexpected),
             }
         }
         Some(("pkg", sub_matches)) => {
@@ -99,7 +99,7 @@ fn main() -> Result<()> {
                     println!("show pkg {package:?}");
                     Ok(())
                 }
-                (&_, _) => Err(yuki::Error::Unexpected),
+                (&_, _) => Err(Error::Unexpected),
             }
         }
         Some(("add", sub_matches)) => {
