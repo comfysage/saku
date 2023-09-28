@@ -39,3 +39,10 @@ pub fn create_config(path: &str) {
         )
     )
 }
+
+pub fn add(name: &str) {
+    println!(
+        "{}",
+        format!("adding {COLOR_MAGENTA}{}{COLOR_RESET} ...", name)
+    )
+}

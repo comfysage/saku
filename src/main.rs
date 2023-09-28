@@ -1,5 +1,7 @@
-use yuki::{Result, Error, make_err };
+use yuki::{Result, Error, make_err};
 use yuki::cli;
+use yuki::pkg::pkg::Pkg;
+use yuki::util::msg;
 use yuki;
 
 use clap::{arg, Command};
@@ -63,8 +65,12 @@ fn main() -> Result<()> {
             let stash_command = sub_matches.subcommand().unwrap_or(("show", sub_matches));
             match stash_command {
                 ("add", sub_matches) => {
-                    let package = sub_matches.get_one::<String>("NAME");
-                    println!("add pkg {package:?}");
+                    let name = sub_matches.get_one::<String>("NAME").ok_or(make_err!(Missing, "no package name specified."))?;
+                    let url = sub_matches.get_one::<String>("URL");
+
+                    msg::add(&name);
+                    let pkg = Pkg::new(name, url.map_or("", |url| &url));
+                    cli::add::add(&pkg)?;
                     Ok(())
                 }
                 ("remove", sub_matches) => {
