@@ -1,9 +1,9 @@
-use crate::pkg::data::{save_pkg, get_pkg_from_path};
+use crate::pkg::data::{get_pkg_from_path, save_pkg};
 use crate::pkg::pkg::Pkg;
 
-use crate::util::{path, msg};
+use crate::util::{msg, path};
 
-use crate::{Result, Error};
+use crate::{Error, Result};
 
 pub fn add(pkg: &Pkg) -> Result<()> {
     if path::pkg_exists("custom", &pkg.name) {

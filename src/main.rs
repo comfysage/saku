@@ -1,8 +1,8 @@
-use yuki::{Result, Error, make_err};
+use yuki;
 use yuki::cli;
 use yuki::pkg::pkg::Pkg;
 use yuki::util::msg;
-use yuki;
+use yuki::{make_err, Error, Result};
 
 use clap::{arg, Command};
 
@@ -65,7 +65,9 @@ fn main() -> Result<()> {
             let stash_command = sub_matches.subcommand().unwrap_or(("show", sub_matches));
             match stash_command {
                 ("add", sub_matches) => {
-                    let name = sub_matches.get_one::<String>("NAME").ok_or(make_err!(Missing, "no package name specified."))?;
+                    let name = sub_matches
+                        .get_one::<String>("NAME")
+                        .ok_or(make_err!(Missing, "no package name specified."))?;
                     let url = sub_matches.get_one::<String>("URL");
 
                     msg::add(&name);
@@ -118,10 +120,7 @@ fn main() -> Result<()> {
             if paths.len() < 1 {
                 return Err(make_err!(Missing, "not enough arguments provided"));
             }
-            paths
-                .iter()
-                .map(|name| cli::show::show(name))
-                .collect()
+            paths.iter().map(|name| cli::show::show(name)).collect()
         }
         _ => unreachable!(), // If all subcommands are defined above, anything else is unreachable!()
     }
