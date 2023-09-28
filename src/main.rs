@@ -76,8 +76,10 @@ fn main() -> Result<()> {
                     Ok(())
                 }
                 ("remove", sub_matches) => {
-                    let package = sub_matches.get_one::<String>("NAME");
-                    println!("remove pkg {package:?}");
+                    let name = sub_matches
+                        .get_one::<String>("NAME")
+                        .ok_or(make_err!(Missing, "no package name specified."))?;
+                    cli::remove::remove(&name)?;
                     Ok(())
                 }
                 ("show", sub_matches) => {

@@ -46,3 +46,10 @@ pub fn add(name: &str) {
         format!("adding {COLOR_MAGENTA}{}{COLOR_RESET} ...", name)
     )
 }
+
+pub fn remove(name: &str) {
+    println!(
+        "{}",
+        format!("removing {COLOR_MAGENTA}{}{COLOR_RESET} ...", name)
+    )
+}
