@@ -25,9 +25,21 @@ fn get_commands() -> Command {
                 .about("Manage pkg configurations")
                 .subcommand_required(true)
                 .arg_required_else_help(true)
-                .subcommand(Command::new("show").about("Show pkg configuration"))
-                .subcommand(Command::new("add").about("Add pkg configuration"))
-                .subcommand(Command::new("remove").about("Remove pkg configuration")),
+                .subcommand(
+                    Command::new("show")
+                        .about("Show pkg configuration")
+                        .arg_required_else_help(true),
+                )
+                .subcommand(
+                    Command::new("add")
+                        .about("Add pkg configuration")
+                        .arg_required_else_help(true),
+                )
+                .subcommand(
+                    Command::new("remove")
+                        .about("Remove pkg configuration")
+                        .arg_required_else_help(true),
+                ),
         )
         .subcommand(
             Command::new("add")
