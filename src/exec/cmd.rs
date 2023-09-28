@@ -20,19 +20,19 @@ pub fn install_cmd(src: &str, dst: &str, perm: i64) -> String {
   format!("install -m {mode} {src} {dst}")
 }
 
-pub fn pack_cmd(name: &str, path: &str, prefix: &str) -> Result<String, Error> {
+pub fn root_cmd(name: &str, path: &str, prefix: &str) -> Result<String, Error> {
   if path.len()  == 0 || prefix.len() == 0 {
-    return Err(Error::Missing("pack struct has missing properties".to_string()))
+    return Err(Error::Missing("root struct has missing properties".to_string()))
   }
 
   let src = util::path::repo_file(&name, &path);
-  let dst = util::path::pack_file(&prefix, &path);
+  let dst = util::path::root_file(&prefix, &path);
 
   if !Path::new(&src).exists() {
-   return  Err(Error::NotFound(format!("pack file '{}' not found", src)))
+   return  Err(Error::NotFound(format!("root file '{}' not found", src)))
   }
 
-  // create util::path_pack_dir(prefix) directory
+  // create util::path_root_dir(prefix) directory
 
   if prefix == "bin" {
     return Ok(install_cmd(&src, &dst, 0755))

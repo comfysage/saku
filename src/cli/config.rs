@@ -3,13 +3,13 @@ use crate::util::{constants, path, io, msg};
 
 use super::install;
 
-fn create_pack() -> Result<()> {
+fn create_root() -> Result<()> {
     io::mkdir(constants::ROOT_DIR.to_string())?;
-    io::mkdir(path::pack_dir("man"))?;
-    io::mkdir(path::pack_dir("share"))?;
+    io::mkdir(path::root_dir("man"))?;
+    io::mkdir(path::root_dir("share"))?;
 
-    if !path::exists(&path::pack_dir("share/man")) {
-        exec::run_in_pack("share", vec![exec::cmd::ln_cmd("../man", "man")])?;
+    if !path::exists(&path::root_dir("share/man")) {
+        exec::run_in_root("share", vec![exec::cmd::ln_cmd("../man", "man")])?;
     }
     Ok(())
 }
@@ -19,7 +19,7 @@ pub fn init() -> Result<()> {
     io::mkdir(constants::PKG_DIR.to_string())?;
     io::mkdir(constants::REPO_DIR.to_string())?;
 
-    create_pack()?;
+    create_root()?;
 
     io::mkdir(path::gr("custom"))?;
 

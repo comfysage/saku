@@ -38,9 +38,7 @@ pub fn start_install(p: Pkg) -> Result<(), Error> {
 
     run_install(&p)?;
 
-    p.pack()?;
-
-    p.install_pack()?;
+    p.install_root()?;
 
     Ok(())
 }

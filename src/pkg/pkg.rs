@@ -1,4 +1,4 @@
-use crate::pkg::pack::Pack;
+use crate::pkg::root::Root;
 use crate::util::{path, self, filepath};
 use crate::Error;
 
@@ -12,7 +12,7 @@ pub struct Pkg {
     pub group: String,
     pub install: Vec<String>,
     pub update: Vec<String>,
-    pub pack: Vec<Pack>,
+    pub root: Vec<Root>,
     path: Option<String>,
 }
 
@@ -25,7 +25,7 @@ impl Pkg {
             group: format!(""),
             install: vec![],
             update: vec![],
-            pack: vec![],
+            root: vec![],
             path: None,
         }
     }
@@ -98,9 +98,6 @@ impl Pkg {
             Some(s) => Ok(s.to_string()),
             None => Ok(path::path_pkg(&self.group, &self.name)),
         }
-    }
-    pub fn pack(&self) -> Result<(), Error> {
-        Ok(())
     }
 }
 

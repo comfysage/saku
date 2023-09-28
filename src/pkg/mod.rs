@@ -1,4 +1,4 @@
 pub mod config;
-pub mod pack;
+pub mod root;
 pub mod pkg;
 pub mod data;

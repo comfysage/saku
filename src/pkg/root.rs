@@ -8,27 +8,27 @@ use crate::util;
 use serde::{Serialize, Deserialize};
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
-pub struct Pack {
+pub struct Root {
     pub prefix: String,
     pub path: String,
 }
 
-impl Pack {
+impl Root {
     pub fn is_bin(&self) -> bool {
         todo!()
     }
 }
 
-impl Pack {
+impl Root {
     pub fn install(&self, pkg: &Pkg) -> Result<(), Error> {
-        exec::pack(&pkg.name, &self.path, &self.prefix)
+        exec::root(&pkg.name, &self.path, &self.prefix)
     }
     pub fn uninstall(&self) -> Result<(), Error> {
         if self.path.len() == 0 || self.prefix.len() == 0 {
             return Err(make_err!(Missing, "invalid installation files"));
         }
 
-        let dst = util::path::pack_file(&self.prefix, &self.path);
+        let dst = util::path::root_file(&self.prefix, &self.path);
         if ! util::filepath::exists(&dst) {
             return Ok(())
         }
@@ -40,10 +40,10 @@ impl Pack {
 }
 
 impl Pkg {
-    pub fn install_pack(&self) -> Result<(), Error> {
-        self.pack.iter().map(|p| p.install(self)).collect()
+    pub fn install_root(&self) -> Result<(), Error> {
+        self.root.iter().map(|p| p.install(self)).collect()
     }
-    pub fn uninstall_pack(&self) -> Result<(), Error> {
-        self.pack.iter().map(|p| p.uninstall()).collect()
+    pub fn uninstall_root(&self) -> Result<(), Error> {
+        self.root.iter().map(|p| p.uninstall()).collect()
     }
 }

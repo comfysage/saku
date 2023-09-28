@@ -1,6 +1,6 @@
 use crate::{Error, util};
 
-use self::{cmd::{clone_cmd, fetch_cmd, log_cmd, pack_cmd, curl_cmd}, run::{run_one, run}};
+use self::{cmd::{clone_cmd, fetch_cmd, log_cmd, root_cmd, curl_cmd}, run::{run_one, run}};
 
 pub mod cmd;
 mod run;
@@ -17,8 +17,8 @@ pub fn changelof(name: &str) -> Result<(), Error> {
   run_one(log_cmd(), &util::path::repo(name))
 }
 
-pub fn pack(name: &str, path: &str, prefix: &str) -> Result<(), Error> {
-  run_one(pack_cmd(name, path, prefix)?, &util::constants::ROOT_DIR)
+pub fn root(name: &str, path: &str, prefix: &str) -> Result<(), Error> {
+  run_one(root_cmd(name, path, prefix)?, &util::constants::ROOT_DIR)
 }
 
 pub fn curl(url: &str, file: &str) -> Result<(), Error> {
@@ -29,6 +29,6 @@ pub fn run_in_repo(name: &str, cmd: Vec<String>) -> Result<(), Error> {
   run(cmd, &util::path::repo(name))
 }
 
-pub fn run_in_pack(prefix: &str, cmd: Vec<String>) -> Result<(), Error> {
-  run(cmd, &util::path::pack_dir(prefix))
+pub fn run_in_root(prefix: &str, cmd: Vec<String>) -> Result<(), Error> {
+  run(cmd, &util::path::root_dir(prefix))
 }

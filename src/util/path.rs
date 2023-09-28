@@ -122,14 +122,14 @@ pub fn repo_file(name: &str, path: &str) -> String {
 	filepath::join(&repo(name), path)
 }
 
-pub fn pack_dir(dir: &str) -> String {
+pub fn root_dir(dir: &str) -> String {
 	if dir.len() == 0 {
 		panic!("argument for type dir was nil")
 	}
 	filepath::join(&ROOT_DIR, dir)
 }
 
-pub fn pack_file(dir: &str, path: &str) -> String {
+pub fn root_file(dir: &str, path: &str) -> String {
 	if path.len() == 0 {
 		panic!("argument for path was nil")
 	}
@@ -137,5 +137,5 @@ pub fn pack_file(dir: &str, path: &str) -> String {
 	if file == "." {
 		panic!("argument for file was invalid")
 	}
-	filepath::join(&pack_dir(dir), &file)
+	filepath::join(&root_dir(dir), &file)
 }
