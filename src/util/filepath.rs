@@ -39,5 +39,10 @@ pub fn extend(path: &str) -> Result<String, Error> {
 }
 
 pub fn base_name(path: &str) -> Result<String, Error> {
-    todo!()
+    Ok(Path::new(path)
+        .file_name()
+        .ok_or(Error::Unexpected)?
+        .to_str()
+        .ok_or(Error::Unexpected)?
+        .to_string())
 }
