@@ -1,6 +1,6 @@
 use std::fs;
 
-use super::constants::{ROOT_DIR, PKG_DIR, HAYASHI_DIR, CONFIG_NAME, STORE_NAME, REPO_DIR, REPO_SEED};
+use super::constants::{ROOT_DIR, PKG_DIR, HAYASHI_DIR, CONFIG_NAME, STORE_NAME, REPO_DIR, REPO_SEED, FLASK_DIR, FLASK_DIR_NAME};
 
 use crate::Error;
 use super::filepath;
@@ -142,4 +142,35 @@ pub fn root_file(dir: &str, path: &str) -> String {
 		panic!("argument for file was invalid")
 	}
 	filepath::join(&root_dir(dir), &file)
+}
+
+pub fn flask(name: &str) -> String {
+	if name.len() == 0 {
+		panic!("argument for flask name was nil")
+	}
+    filepath::join(&FLASK_DIR, &pkg_name(name))
+}
+
+pub fn flask_dir(name: &str) -> String {
+	if name.len() == 0 {
+		panic!("argument for flask name was nil")
+	}
+    filepath::join(&repo(name), &FLASK_DIR_NAME)
+}
+
+pub fn flasks() -> Result<Vec<String>, Error> {
+    let mut files = vec![];
+    
+    for f in fs::read_dir(&*FLASK_DIR)? {
+        let f = f?;
+        let f_path_bind = f.path();
+        let f_path = match f_path_bind.to_str() {
+            Some(s) => Ok(s),
+            None => Err(Error::Unexpected),
+        }?;
+        let name = filepath::base_name(f_path)?;
+        files.push(name);
+    }
+
+    Ok(files)
 }
