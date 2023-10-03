@@ -115,6 +115,10 @@ pub fn repo(name: &str) -> String {
 	filepath::join(&REPO_DIR, name)
 }
 
+pub fn repo_exists(name: &str) -> bool {
+    filepath::exists(&repo(name))
+}
+
 pub fn repo_file(name: &str, path: &str) -> String {
 	if path.len() == 0 {
 		panic!("argument for file name was nil")
