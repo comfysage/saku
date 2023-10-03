@@ -12,5 +12,8 @@ lazy_static! {
     pub static ref PKG_DIR: String = format!("{}{}", *HAYASHI_DIR, "/flask");
     pub static ref ROOT_DIR: String = format!("{}{}", *HAYASHI_DIR, "/root");
 
+    pub static ref FLASK_DIR_NAME: String = "flasks".to_string();
+    pub static ref FLASK_DIR: String = format!("{}/{}", *PKG_DIR, *FLASK_DIR_NAME);
+
     pub static ref REPO_SEED: String = "saku.yaml".to_string();
 }
