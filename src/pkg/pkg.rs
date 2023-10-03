@@ -4,7 +4,7 @@ use crate::Error;
 
 use serde::{Serialize, Deserialize};
 
-#[derive(Debug, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Pkg {
     pub name: String,
     pub desc: String,

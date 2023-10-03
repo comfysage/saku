@@ -7,7 +7,7 @@ use crate::util;
 
 use serde::{Serialize, Deserialize};
 
-#[derive(Debug, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Root {
     pub prefix: String,
     pub path: String,
