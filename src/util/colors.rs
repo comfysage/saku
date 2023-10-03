@@ -1,3 +1,5 @@
+#![allow(unused)]
+
 pub static COLOR_RED: &str = "\x1b[31m";
 pub static COLOR_GREEN: &str = "\x1b[32m";
 pub static COLOR_YELLOW: &str = "\x1b[33m";
