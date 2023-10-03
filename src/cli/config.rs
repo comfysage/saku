@@ -1,8 +1,6 @@
 use crate::{Result, Error, exec, pkg};
 use crate::util::{constants, path, io, msg};
 
-use super::install;
-
 fn create_root() -> Result<()> {
     io::mkdir(constants::ROOT_DIR.to_string())?;
     io::mkdir(path::root_dir("man"))?;
@@ -19,22 +17,22 @@ pub fn init() -> Result<()> {
     io::mkdir(constants::PKG_DIR.to_string())?;
     io::mkdir(constants::REPO_DIR.to_string())?;
 
+    io::mkdir(constants::FLASK_DIR.to_string())?;
+
     create_root()?;
 
     io::mkdir(path::gr("custom"))?;
 
-    if !path::pkg_exists("custom", "core") {
-        msg::fetch("core", "https://github.com/crispybaccoon/saku");
+    if !path::pkg_exists("flasks", "core") {
+        msg::fetch("core", "https://github.com/crispybaccoon/pkg");
 
-        let p = path::path_pkg("custom", "core");
-
-        exec::curl("https://raw.githubusercontent.com/CrispyBaccoon/saku/mega/core.yaml", &p)?;
+        super::flask::add_with_name("core", "crispybaccoon/pkg")?;
     }
 
-    if !path::exists(&path::gr("core")) {
-        let p = pkg::data::get_pkg_from_path(&path::path_pkg("custom", "core"))?;
-        install::start_install(p)?;
+    if !path::repo_exists("core") {
+        super::update::update()?;
     }
+
     Ok(())
 }
 
