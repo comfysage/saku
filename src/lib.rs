@@ -20,6 +20,7 @@ pub enum Error {
   // io object already exists, multiple packages with similar names
   Conflict(String),
   IO(String),
+  Regex(String),
   #[default]
   Unexpected,
 }
@@ -31,6 +32,7 @@ impl fmt::Display for Error {
             Error::Missing(s) => format!("Missing: {s}"),
             Error::Conflict(s) => format!("Conflict: {s}"),
             Error::IO(s) => format!("IO: {s}"),
+            Error::Regex(s) => format!("Regex: {s}"),
             Error::Unexpected => format!("unexpected error"),
         };
         write!(f, "{}", msg)
@@ -40,6 +42,12 @@ impl fmt::Display for Error {
 impl From<io::Error> for Error {
     fn from(value: io::Error) -> Self {
         Self::IO(format!("io error {}", value.raw_os_error().unwrap()))
+    }
+}
+
+impl From<regex::Error> for Error {
+    fn from(value: regex::Error) -> Self {
+        Self::Regex(format!("regex error {}", value.to_string()))
     }
 }
 
