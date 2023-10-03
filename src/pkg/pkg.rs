@@ -1,4 +1,5 @@
 use crate::pkg::root::Root;
+use crate::util::url::extend_url;
 use crate::util::{path, self, filepath};
 use crate::Error;
 
@@ -37,44 +38,8 @@ impl Pkg {
         let local_path = self.get_path()?;
         self.infer_group(local_path)?;
         // infer url
-        let mut finish = false;
-        let mut foundslash = false;
-        let mut founddb = false;
-        self.url.clone().chars().into_iter().for_each(|s| {
-            if finish {
-                return;
-            }
-            if s == '.' {
-                // founddot = true
-
-                // found address without protocol
-                if foundslash == false {
-                    self.url = format!("https://{}", self.url);
-                    finish = true;
-                    return;
-                }
-
-                return;
-            }
-
-            if s == '/' {
-                foundslash = true;
-                finish = true;
-
-                // found protocol
-                if founddb {
-                    return;
-                }
-
-                // potential address already catched
-                self.url = format!("https://github.com/{}", self.url);
-                return;
-            }
-
-            if s == ':' {
-                founddb = true
-            }
-        });
+        let url = extend_url(&self.url)?;
+        self.url = url;
 
         Ok(())
     }
