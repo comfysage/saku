@@ -2,7 +2,10 @@ use std::fs;
 
 use crate::util;
 use crate::Error;
+use crate::util::path;
+use crate::util::url;
 
+use super::flask::Flask;
 use super::pkg::Pkg;
 use super::config::Config;
 
@@ -60,4 +63,24 @@ fn store_repo_seed(pkg: &mut Pkg) -> Result<(), Error> {
 
 pub fn save_config(default: Config) -> Result<(), Error> {
     todo!()
+}
+
+pub fn get_flask(url: &str) -> Result<Flask, Error> {
+    let name = url::url_name(url)?;
+    let flask = get_flask_from_name(&name)?;
+    Ok(flask)
+}
+
+pub fn get_flask_from_name(name: &str) -> Result<Flask, Error> {
+    let path = path::flask(name);
+    let pkg = get_pkg_from_path(&path)?;
+    let flask = Flask::from_pkg(pkg)?;
+    Ok(flask)
+}
+
+pub fn get_flasks() -> Result<Vec<String>, Error> {
+    let files = path::flasks()?;
+    let flasks = files.iter().map(|s| path::remove_extension(s.to_string())).collect();
+
+    Ok(flasks)
 }
