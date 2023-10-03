@@ -1,13 +1,19 @@
 use crate::pkg::data;
-use crate::Result;
 use crate::pkg::flask::Flask;
 use crate::util::msg;
+use crate::Result;
 
 pub fn update_flask(flask: &Flask) -> Result<()> {
     msg::fetch(&flask.name(), &flask.url());
 
     flask.update()?;
 
+    Ok(())
+}
+
+pub fn update_flask_from_url(url: &String) -> Result<()> {
+    let flask = data::get_flask(&url)?;
+    update_flask(&flask)?;
     Ok(())
 }
 

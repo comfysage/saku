@@ -54,6 +54,11 @@ fn get_commands() -> Command {
                 .arg(arg!(<NAME> ... "Package to remove")),
         )
         .subcommand(
+            Command::new("update")
+                .about("Update flasks")
+                .arg(arg!([NAME] ... "Flask to update")),
+        )
+        .subcommand(
             Command::new("show")
                 .about("Show package details")
                 .arg_required_else_help(true)
@@ -123,6 +128,23 @@ fn main() -> Result<()> {
                 .flatten()
                 .collect::<Vec<_>>();
             println!("Removing {paths:?}");
+            Ok(())
+        }
+        Some(("update", sub_matches)) => {
+            let urls = sub_matches
+                .get_many::<String>("NAME")
+                .into_iter()
+                .flatten()
+                .collect::<Vec<_>>();
+            if urls.len() < 1 {
+                cli::update::update()?;
+            } else {
+                urls.iter()
+                    .map(|url| {
+                        cli::update::update_flask_from_url(url)
+                    })
+                    .collect::<Result<()>>()?;
+            }
             Ok(())
         }
         Some(("show", sub_matches)) => {
