@@ -59,6 +59,11 @@ fn get_commands() -> Command {
                 .arg(arg!([NAME] ... "Flask to update")),
         )
         .subcommand(
+            Command::new("flask")
+                .about("Add flasks")
+                .arg(arg!([NAME] ... "Flask to add")),
+        )
+        .subcommand(
             Command::new("show")
                 .about("Show package details")
                 .arg_required_else_help(true)
@@ -142,6 +147,24 @@ fn main() -> Result<()> {
                 urls.iter()
                     .map(|url| {
                         cli::update::update_flask_from_url(url)
+                    })
+                    .collect::<Result<()>>()?;
+            }
+            Ok(())
+        }
+        Some(("flask", sub_matches)) => {
+            let urls = sub_matches
+                .get_many::<String>("NAME")
+                .into_iter()
+                .flatten()
+                .collect::<Vec<_>>();
+            if urls.len() < 1 {
+                // `saku flask` is currently an alias for `saku update`
+                cli::update::update()?;
+            } else {
+                urls.iter()
+                    .map(|url| {
+                        cli::flask::add(url)
                     })
                     .collect::<Result<()>>()?;
             }
