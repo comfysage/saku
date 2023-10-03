@@ -13,3 +13,9 @@ pub fn mkdir(path: String) -> Result<bool, Error> {
 
     Ok(true)
 }
+
+pub fn link(target: &str, path: &str) -> Result<(), Error> {
+    std::os::unix::fs::symlink(target, path)?;
+
+    Ok(())
+}
