@@ -48,6 +48,12 @@ fn get_commands() -> Command {
                 .arg(arg!(<NAME> ... "Package to install")),
         )
         .subcommand(
+            Command::new("upgrade")
+                .about("Upgrade a package")
+                .arg_required_else_help(true)
+                .arg(arg!(<NAME> ... "Package to upgrade")),
+        )
+        .subcommand(
             Command::new("remove")
                 .about("Remove a package")
                 .arg_required_else_help(true)
@@ -124,6 +130,20 @@ fn main() -> Result<()> {
             paths
                 .iter()
                 .map(|name| cli::install::install(name))
+                .collect()
+        }
+        Some(("upgrade", sub_matches)) => {
+            let paths = sub_matches
+                .get_many::<String>("NAME")
+                .into_iter()
+                .flatten()
+                .collect::<Vec<_>>();
+            if paths.len() < 1 {
+                return Err(make_err!(Missing, "not enough arguments provided"));
+            }
+            paths
+                .iter()
+                .map(|name| cli::upgrade::upgrade(name))
                 .collect()
         }
         Some(("remove", sub_matches)) => {

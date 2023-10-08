@@ -5,3 +5,4 @@ pub mod add;
 pub mod remove;
 pub mod flask;
 pub mod update;
+pub mod upgrade;
