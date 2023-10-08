@@ -2,17 +2,35 @@ use std::fs;
 
 use serde::Deserialize;
 
-use crate::{ Result, Error };
+use crate::{Error, Result};
 
 #[derive(Deserialize)]
-pub struct Config {}
+pub struct ConfigMain {
+    pub frozen_update: bool,
+}
+
+impl ConfigMain {
+    pub fn default() -> Self {
+        Self {
+            frozen_update: false,
+        }
+    }
+}
+
+#[derive(Deserialize)]
+pub struct Config {
+    pub main: ConfigMain,
+}
 
 impl Config {
     pub fn new() -> Result<Self> {
         if let Some(path) = directories::ProjectDirs::from("dev", "crispybaccoon", "saku") {
-            let content = fs::read_to_string(path.config_dir())?;
-            let config: Self = serde_yaml::from_str(&content).unwrap_or(Self::default());
-            Ok(config)
+            if let Some(content) = fs::read_to_string(path.config_dir()).ok() {
+                let config: Self = toml::from_str(&content).unwrap_or(Self::default());
+                Ok(config)
+            } else {
+                return Ok(Self::default());
+            }
         } else {
             Err(make_err!(IO, "no config dir."))
         }
@@ -21,6 +39,8 @@ impl Config {
 
 impl Default for Config {
     fn default() -> Self {
-        Self {}
+        Self {
+            main: ConfigMain::default(),
+        }
     }
 }

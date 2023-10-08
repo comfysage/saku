@@ -1,5 +1,6 @@
 use saku;
 use saku::cli;
+use saku::pkg::config;
 use saku::pkg::pkg::Pkg;
 use saku::util::msg;
 use saku::{make_err, Error, Result};
@@ -78,6 +79,8 @@ fn get_commands() -> Command {
 }
 
 fn main() -> Result<()> {
+    let config = config::Config::new()?;
+
     let matches = get_commands().get_matches();
 
     match matches.subcommand() {
@@ -165,11 +168,13 @@ fn main() -> Result<()> {
                 cli::update::update()?;
             } else {
                 urls.iter()
-                    .map(|url| {
-                        cli::update::update_flask_from_url(url)
-                    })
+                    .map(|url| cli::update::update_flask_from_url(url))
                     .collect::<Result<()>>()?;
             }
+            if config.main.frozen_update {
+                return Ok(());
+            }
+            cli::upgrade::upgrade("saku")?;
             Ok(())
         }
         Some(("flask", sub_matches)) => {
@@ -183,9 +188,7 @@ fn main() -> Result<()> {
                 cli::update::update()?;
             } else {
                 urls.iter()
-                    .map(|url| {
-                        cli::flask::add(url)
-                    })
+                    .map(|url| cli::flask::add(url))
                     .collect::<Result<()>>()?;
             }
             Ok(())
