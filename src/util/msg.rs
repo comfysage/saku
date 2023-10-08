@@ -1,11 +1,27 @@
 use super::colors::{COLOR_BLUE, COLOR_CYAN, COLOR_MAGENTA, COLOR_RESET, COLOR_YELLOW};
 
+pub mod general {
+    use crate::util::msg::{COLOR_CYAN, COLOR_MAGENTA, COLOR_RESET, COLOR_YELLOW};
+    pub fn name_f(name: &str) -> String {
+        format!("{COLOR_MAGENTA}{}{COLOR_RESET}", name)
+    }
+
+    pub fn present_name(name: &str, group: &str) -> String {
+        format!("{COLOR_CYAN}{}/{}", group, name_f(name))
+    }
+
+    pub fn url_f(url: &str) -> String {
+        format!("{COLOR_YELLOW}{url}{COLOR_RESET}")
+    }
+}
+
 pub fn clone(name: &str, url: &str) {
     println!(
         "{}",
         format!(
-            "cloning {COLOR_MAGENTA}{}{COLOR_RESET} from {COLOR_YELLOW}{}{COLOR_RESET} ...",
-            name, url
+            "cloning {} from {} ...",
+            general::name_f(name),
+            general::url_f(url)
         )
     );
 }
@@ -14,8 +30,9 @@ pub fn build(name: &str, path: &str) {
     println!(
         "{}",
         format!(
-            "building {COLOR_MAGENTA}{}{COLOR_RESET} at {COLOR_BLUE}{}{COLOR_RESET} ...",
-            name, path
+            "building {} at {COLOR_BLUE}{}{COLOR_RESET} ...",
+            general::name_f(name),
+            path
         )
     );
 }
@@ -24,8 +41,9 @@ pub fn fetch(name: &str, url: &str) {
     println!(
         "{}",
         format!(
-            "fetching {COLOR_MAGENTA}{}{COLOR_RESET} from {COLOR_YELLOW}{}{COLOR_RESET} ...",
-            name, url
+            "fetching {} from {} ...",
+            general::name_f(name),
+            general::url_f(url)
         )
     )
 }
@@ -34,22 +52,16 @@ pub fn create_config(path: &str) {
     println!(
         "{}",
         format!(
-            "creating config file at {COLOR_CYAN}{}{COLOR_RESET} ...",
+            "creating config file at {COLOR_BLUE}{}{COLOR_RESET} ...",
             path
         )
     )
 }
 
 pub fn add(name: &str) {
-    println!(
-        "{}",
-        format!("adding {COLOR_MAGENTA}{}{COLOR_RESET} ...", name)
-    )
+    println!("{}", format!("adding  {}", general::name_f(name)))
 }
 
 pub fn remove(name: &str) {
-    println!(
-        "{}",
-        format!("removing {COLOR_MAGENTA}{}{COLOR_RESET} ...", name)
-    )
+    println!("{}", format!("removing  {}", general::name_f(name)))
 }
