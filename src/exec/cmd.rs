@@ -11,6 +11,10 @@ pub fn fetch_cmd() -> Vec<String> {
   vec!["git fetch -q".to_string(), "git checkout -q".to_string()]
 }
 
+pub fn pull_cmd() -> Vec<String> {
+  vec!["git pull".to_string()]
+}
+
 pub fn log_cmd() -> String {
   "git -c pager.show=false show --format=' - %C(yellow)%h%C(reset) %<(80,trunc)%s' -q @@{1}..@@{0}".to_string()
 }

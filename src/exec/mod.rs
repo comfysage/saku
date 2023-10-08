@@ -1,6 +1,6 @@
 use crate::{Error, util};
 
-use self::{cmd::{clone_cmd, fetch_cmd, log_cmd, root_cmd, curl_cmd}, run::{run_one, run}};
+use self::{cmd::{clone_cmd, fetch_cmd, log_cmd, root_cmd, curl_cmd, pull_cmd}, run::{run_one, run}};
 
 pub mod cmd;
 mod run;
@@ -11,6 +11,10 @@ pub fn clone(url: &str, name: &str) -> Result<(), Error> {
 
 pub fn fetch(name: &str) -> Result<(), Error> {
   run(fetch_cmd(), &util::path::repo(name))
+}
+
+pub fn pull(name: &str) -> Result<(), Error> {
+  run(pull_cmd(), &util::path::repo(name))
 }
 
 pub fn changelof(name: &str) -> Result<(), Error> {
