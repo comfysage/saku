@@ -28,7 +28,9 @@ pub fn clone_pkg(p: &Pkg) -> Result<(), Error> {
 pub fn run_install(p: &Pkg) -> Result<(), Error> {
     msg::build(&p.name, &path::repo(&p.name));
 
-    exec::run_in_repo(&p.name, p.install.clone())?;
+    if p.install.len() > 0 {
+        exec::run_in_repo(&p.name, p.install.clone())?;
+    }
 
     Ok(())
 }
