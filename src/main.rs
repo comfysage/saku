@@ -206,6 +206,9 @@ fn main() -> Result<()> {
             }
             paths.iter().map(|name| cli::show::show(name)).collect()
         }
-        _ => unreachable!(), // If all subcommands are defined above, anything else is unreachable!()
+        // If all subcommands are defined above, anything else is unreachable!()
+        _ => {
+            Err(make_err!(Missing, "missing command. run saku --help."))
+        },
     }
 }
