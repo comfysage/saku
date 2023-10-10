@@ -44,6 +44,7 @@ fn get_commands() -> Command {
         )
         .subcommand(
             Command::new("add")
+                .visible_alias("install")
                 .about("Install a package")
                 .arg_required_else_help(true)
                 .arg(arg!(<NAME> ... "Package to install")),
@@ -56,6 +57,7 @@ fn get_commands() -> Command {
         )
         .subcommand(
             Command::new("remove")
+                .visible_alias("uninstall")
                 .about("Remove a package")
                 .arg_required_else_help(true)
                 .arg(arg!(<NAME> ... "Package to remove")),
