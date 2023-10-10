@@ -13,6 +13,7 @@ fn get_commands() -> Command {
         .subcommand_required(true)
         .arg_required_else_help(true)
         .allow_external_subcommands(true)
+        .subcommand(Command::new("env").about("Show environment script"))
         .subcommand(
             Command::new("config")
                 .about("Manage global configuration")
@@ -86,6 +87,10 @@ fn main() -> Result<()> {
     let matches = get_commands().get_matches();
 
     match matches.subcommand() {
+        Some(("env", _)) => {
+            cli::env::env()?;
+            Ok(())
+        }
         Some(("config", sub_matches)) => {
             let stash_command = sub_matches.subcommand().unwrap_or(("init", sub_matches));
             match stash_command {
