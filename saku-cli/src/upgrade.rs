@@ -1,6 +1,6 @@
-use crate::{exec, Result};
+use saku_lib::{exec, Result};
 
-use crate::pkg::data;
+use saku_lib::pkg::data;
 
 pub fn upgrade(name: &str) -> Result<()> {
     let pkg = data::get_pkg(name)?;
@@ -10,7 +10,7 @@ pub fn upgrade(name: &str) -> Result<()> {
     if pkg.update.len() > 0 {
         exec::run_in_repo(&name, pkg.update.clone())?;
     } else {
-        super::install::run_install(&pkg)?;
+        crate::install::run_install(&pkg)?;
     }
 
     pkg.install_root()?;

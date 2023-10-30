@@ -1,5 +1,5 @@
-use crate::{Result, Error, exec, pkg};
-use crate::util::{constants, path, io, msg};
+use saku_lib::{Result, Error, exec, pkg, make_err};
+use saku_lib::util::{constants, path, io, msg};
 
 fn create_root() -> Result<()> {
     io::mkdir(constants::ROOT_DIR.to_string())?;
@@ -26,11 +26,11 @@ pub fn init() -> Result<()> {
     if !path::pkg_exists("flasks", "core") {
         msg::fetch("core", "https://github.com/crispybaccoon/pkg");
 
-        super::flask::add_with_name("core", "crispybaccoon/pkg")?;
+        crate::flask::add_with_name("core", "crispybaccoon/pkg")?;
     }
 
     if !path::repo_exists("core") {
-        super::update::update()?;
+        crate::update::update()?;
     }
 
     Ok(())

@@ -1,9 +1,9 @@
-use crate::pkg::data::{get_pkg_from_path, save_pkg};
-use crate::pkg::pkg::Pkg;
+use saku_lib::pkg::data::{get_pkg_from_path, save_pkg};
+use saku_lib::pkg::pkg::Pkg;
 
-use crate::util::{msg, path};
+use saku_lib::util::{msg, path};
 
-use crate::{Error, Result};
+use saku_lib::{Error, Result, make_err};
 
 pub fn add(pkg: &Pkg) -> Result<()> {
     if path::pkg_exists("custom", &pkg.name) {

@@ -1,8 +1,8 @@
-use crate::Error;
-use crate::exec;
-use crate::pkg::data::get_pkg;
-use crate::pkg::pkg::Pkg;
-use crate::util::{msg, path};
+use saku_lib::{Error, make_err};
+use saku_lib::exec;
+use saku_lib::pkg::data::get_pkg;
+use saku_lib::pkg::pkg::Pkg;
+use saku_lib::util::{msg, path};
 
 pub fn install(pkg_name: &String) -> Result<(), Error> {
     let p: Pkg = get_pkg(pkg_name)?;

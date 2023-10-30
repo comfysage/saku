@@ -54,4 +54,10 @@ impl From<regex::Error> for Error {
 pub mod util;
 pub mod exec;
 pub mod pkg;
-pub mod cli;
+
+extern crate directories;
+extern crate lazy_static;
+extern crate regex;
+extern crate serde;
+extern crate serde_yaml;
+extern crate toml;

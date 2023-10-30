@@ -1,5 +1,5 @@
-use crate::util::path;
-use crate::Result;
+use saku_lib::util::path;
+use saku_lib::Result;
 
 pub fn env() -> Result<()> {
     let script = format!(
