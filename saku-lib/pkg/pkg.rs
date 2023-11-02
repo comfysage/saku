@@ -1,6 +1,7 @@
 use crate::pkg::root::Root;
 use crate::util::url::extend_url;
 use crate::util::{path, self, filepath};
+use crate::util::{msg, url};
 use crate::Error;
 
 use serde::{Serialize, Deserialize};
@@ -90,6 +91,29 @@ impl Pkg {
             return Err(make_err!(Missing, "no url specified."));
         }
 
+        Ok(())
+    }
+}
+
+impl Pkg {
+    pub fn show(&self) -> Result<(), Error> {
+        println!("{}", msg::general::present_name(&self.name, &self.group));
+
+        if self.desc.len() > 0 {
+            println!("{}", self.desc);
+        }
+        if self.url.len() > 0 {
+            println!(
+                "url  {}",
+                msg::general::url_f(&url::shorten_url(&self.url)?)
+            );
+        }
+        if self.install.len() > 0 {
+            println!("bash");
+            for s in &self.install {
+                println!("  {}", s);
+            }
+        }
         Ok(())
     }
 }

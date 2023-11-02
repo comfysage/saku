@@ -1,5 +1,5 @@
-use saku;
-use saku::cli;
+use saku_lib as saku;
+use saku_cli as cli;
 use saku::pkg::config;
 use saku::pkg::pkg::Pkg;
 use saku::util::msg;

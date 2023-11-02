@@ -1,7 +1,7 @@
-use crate::pkg::data;
-use crate::pkg::flask::Flask;
+use saku_lib::pkg::data;
+use saku_lib::pkg::flask::Flask;
 
-use crate::Result;
+use saku_lib::Result;
 
 pub fn add_with_name(name: &str, url: &str) -> Result<()> {
     let flask = Flask::new(name, url)?;
@@ -30,7 +30,7 @@ pub fn add(url: &str) -> Result<()> {
 pub fn update(url: &str) -> Result<()> {
     let flask = data::get_flask(url)?;
 
-    super::update::update_flask(&flask)?;
+    crate::update::update_flask(&flask)?;
 
     Ok(())
 }

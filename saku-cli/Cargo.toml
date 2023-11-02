@@ -1,0 +1,9 @@
+[package]
+name = "saku-cli"
+version = "0.1.0"
+
+[lib]
+path = "src/lib.rs"
+
+[dependencies]
+saku-lib = { path = "../saku-lib" }
