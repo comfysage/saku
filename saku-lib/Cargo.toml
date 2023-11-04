@@ -6,6 +6,7 @@ version = "0.1.0"
 path = "lib.rs"
 
 [dependencies]
+log = "0.4"
 directories = "5.0.1"
 lazy_static = "1.4.0"
 regex = "1.9.6"
