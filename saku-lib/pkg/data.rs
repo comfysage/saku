@@ -22,7 +22,7 @@ pub fn get_pkg_from_path(path: &str) -> Result<Pkg, Error> {
 }
 
 pub fn get_pkg(name: &str) -> Result<Pkg, Error> {
-    let (path, is_dir) = util::path::path_determine(name.to_string())?;
+    let (path, is_dir): (String, bool) = util::path::path_determine(name.to_string())?;
 
     if is_dir {
         let pkg_path = util::path::repo_seed(&path);
