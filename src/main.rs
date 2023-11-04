@@ -5,7 +5,7 @@ use saku::pkg::pkg::Pkg;
 use saku::util::msg;
 use saku::prelude::*;
 
-use clap::{arg, Command};
+use clap::{arg, Command, Arg};
 
 fn get_commands() -> Command {
     Command::new("saku")
@@ -78,6 +78,17 @@ fn get_commands() -> Command {
                 .about("Show package details")
                 .arg_required_else_help(true)
                 .arg(arg!(<NAME> ... "Package to show")),
+        )
+        .subcommand(
+            Command::new("list")
+                .about("List flasks")
+                .arg(
+                    Arg::new("installed")
+                        .long("installed")
+                        .short('i')
+                        .required(false)
+                        .help("List installed packages")
+                )
         )
 }
 
@@ -211,6 +222,20 @@ fn main() -> Result<()> {
                 return Err(make_err!(Missing, "not enough arguments provided"));
             }
             paths.iter().map(|name| cli::show::show(name)).collect()
+        }
+        Some(("list", sub_matches)) => {
+            let flag: Option<&bool> = sub_matches.get_one("installed");
+            if flag.is_some() {
+                // list installed
+                todo!();
+
+                return Ok(());
+            }
+
+            // list flasks
+            saku_cli::list::list()?;
+
+            Ok(())
         }
         // If all subcommands are defined above, anything else is unreachable!()
         _ => {
