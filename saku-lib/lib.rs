@@ -5,6 +5,7 @@ pub mod util;
 pub mod exec;
 pub mod pkg;
 
+extern crate log;
 extern crate directories;
 extern crate lazy_static;
 extern crate regex;
