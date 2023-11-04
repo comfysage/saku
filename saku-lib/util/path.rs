@@ -2,7 +2,7 @@ use std::fs;
 
 use super::constants::{ROOT_DIR, PKG_DIR, HAYASHI_DIR, CONFIG_NAME, STORE_NAME, REPO_DIR, REPO_SEED, FLASK_DIR, FLASK_DIR_NAME};
 
-use crate::Error;
+use crate::prelude::*;
 use super::filepath;
 
 pub fn exists(path: &str) -> bool {
@@ -52,7 +52,7 @@ pub fn pkg_exists(gr: &str, name: &str) -> bool {
 	exists(&p)
 }
 
-pub fn path_determine(path: String) -> Result<(String, bool), Error> {
+pub fn path_determine(path: String) -> Result<(String, bool)> {
 	let mut dir = false;
 	let p: &str;
 
@@ -76,7 +76,7 @@ pub fn path_determine(path: String) -> Result<(String, bool), Error> {
 	Ok(( p.to_string(), false ))
 }
 
-pub fn pkg_search(name: &str) -> Result<String, Error> {
+pub fn pkg_search(name: &str) -> Result<String> {
 	if pkg_exists("core", name) {
 		return Ok(path_pkg("core", name));
 	}
@@ -158,7 +158,7 @@ pub fn flask_dir(name: &str) -> String {
     filepath::join(&repo(name), &FLASK_DIR_NAME)
 }
 
-pub fn flasks() -> Result<Vec<String>, Error> {
+pub fn flasks() -> Result<Vec<String>> {
     let mut files = vec![];
     
     for f in fs::read_dir(&*FLASK_DIR)? {

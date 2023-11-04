@@ -1,7 +1,7 @@
 use saku_lib::pkg::data;
 use saku_lib::pkg::flask::Flask;
 
-use saku_lib::Result;
+use saku_lib::prelude::*;
 
 pub fn add_with_name(name: &str, url: &str) -> Result<()> {
     let flask = Flask::new(name, url)?;

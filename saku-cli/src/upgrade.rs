@@ -1,4 +1,5 @@
-use saku_lib::{exec, Result};
+use saku_lib::exec;
+use saku_lib::prelude::*;
 
 use saku_lib::pkg::data;
 

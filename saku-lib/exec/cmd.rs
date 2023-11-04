@@ -1,7 +1,7 @@
 use std::path::Path;
 
 use crate::util;
-use crate::Error;
+use crate::prelude::*;
 
 pub fn clone_cmd(url: &str, out: &str) -> String {
   format!("git clone --filter=blob:none {} {}", url, out)
@@ -24,7 +24,7 @@ pub fn install_cmd(src: &str, dst: &str, perm: i64) -> String {
   format!("install -m {mode} {src} {dst}")
 }
 
-pub fn root_cmd(name: &str, path: &str, prefix: &str) -> Result<String, Error> {
+pub fn root_cmd(name: &str, path: &str, prefix: &str) -> Result<String> {
   if path.len()  == 0 || prefix.len() == 0 {
     return Err(Error::Missing("root struct has missing properties".to_string()))
   }

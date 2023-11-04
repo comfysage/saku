@@ -1,5 +1,5 @@
 use saku_lib::util::path;
-use saku_lib::Result;
+use saku_lib::prelude::*;
 
 pub fn env() -> Result<()> {
     let script = format!(

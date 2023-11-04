@@ -1,4 +1,4 @@
-use crate::Error;
+use crate::prelude::*;
 use std::path::{Path, PathBuf};
 
 use super::cli::{get_cwd, self};
@@ -7,7 +7,7 @@ pub fn join(path: &str, suffix: &str) -> String {
     Path::new(path).join(suffix).to_str().unwrap().to_string()
 }
 
-pub fn abs(path: &str) -> Result<String, Error> {
+pub fn abs(path: &str) -> Result<String> {
     let path = Path::new(path);
     let mut components = path.components();
 
@@ -51,7 +51,7 @@ pub fn is_dir(path: &str) -> bool {
     p.is_dir()
 }
 
-pub fn extend(path: &str) -> Result<String, Error> {
+pub fn extend(path: &str) -> Result<String> {
     if path.len() == 0 {
         return Err(make_err!(Missing, "path not long enough"));
     }
@@ -68,7 +68,7 @@ pub fn extend(path: &str) -> Result<String, Error> {
     Ok(abs_path)
 }
 
-pub fn base_name(path: &str) -> Result<String, Error> {
+pub fn base_name(path: &str) -> Result<String> {
     Ok(Path::new(path)
         .file_name()
         .ok_or(Error::Unexpected)?

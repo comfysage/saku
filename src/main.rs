@@ -3,7 +3,7 @@ use saku_cli as cli;
 use saku::pkg::config;
 use saku::pkg::pkg::Pkg;
 use saku::util::msg;
-use saku::{make_err, Error, Result};
+use saku::prelude::*;
 
 use clap::{arg, Command};
 

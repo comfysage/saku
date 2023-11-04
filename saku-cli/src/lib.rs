@@ -7,5 +7,6 @@ pub mod remove;
 pub mod flask;
 pub mod update;
 pub mod upgrade;
+pub mod list;
 
 extern crate saku_lib;

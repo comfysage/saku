@@ -1,6 +1,6 @@
 use crate::exec;
 use crate::util::{constants, io, path, url};
-use crate::Result;
+use crate::prelude::*;
 
 use crate::pkg::pkg::Pkg;
 
@@ -77,7 +77,7 @@ impl Flask {
 
 mod test {
     #![allow(unused_imports)]
-    use crate::Result;
+    use crate::prelude::*;
 
     use super::Flask;
 

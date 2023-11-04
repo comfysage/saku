@@ -1,10 +1,10 @@
 use crate::pkg::root::Root;
+use crate::prelude::*;
 use crate::util::url::extend_url;
-use crate::util::{path, self, filepath};
+use crate::util::{self, filepath, path};
 use crate::util::{msg, url};
-use crate::Error;
 
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Pkg {
@@ -35,7 +35,7 @@ impl Pkg {
 
 // meta
 impl Pkg {
-    pub fn fill(&mut self) -> Result<(), Error> {
+    pub fn fill(&mut self) -> Result<()> {
         let local_path = self.get_path()?;
         self.infer_group(local_path)?;
         // infer url
@@ -44,7 +44,7 @@ impl Pkg {
 
         Ok(())
     }
-    pub fn infer_group(&mut self, path: String) -> Result<(), Error> {
+    pub fn infer_group(&mut self, path: String) -> Result<()> {
         if self.group.len() > 0 {
             return Ok(());
         }
@@ -59,7 +59,7 @@ impl Pkg {
         self.group = sp[sp.len() - 2].to_string();
         Ok(())
     }
-    pub fn get_path(&mut self) -> Result<String, Error> {
+    pub fn get_path(&mut self) -> Result<String> {
         match &self.path {
             Some(s) => Ok(s.to_string()),
             None => Ok(path::path_pkg(&self.group, &self.name)),
@@ -69,10 +69,10 @@ impl Pkg {
 
 // data
 impl Pkg {
-    pub fn from_string(str: String) -> Result<Pkg, Error> {
+    pub fn from_string(str: String) -> Result<Pkg> {
         serde_yaml::from_str(&str).map_err(|_| make_err!())
     }
-    pub fn to_string(&self) -> Result<String, Error> {
+    pub fn to_string(&self) -> Result<String> {
         serde_yaml::to_string(self).map_err(|_| make_err!())
     }
 }
@@ -80,7 +80,7 @@ impl Pkg {
 // safeguard
 impl Pkg {
     // error checking for pkg to avoid unwanted behaviour
-    pub fn safe_guard(&self) -> Result<(), Error> {
+    pub fn safe_guard(&self) -> Result<()> {
         // require pkg name
         if self.name.len() < 1 {
             return Err(make_err!(Missing, "no pkg name specified."));
@@ -96,7 +96,7 @@ impl Pkg {
 }
 
 impl Pkg {
-    pub fn show(&self) -> Result<(), Error> {
+    pub fn show(&self) -> Result<()> {
         println!("{}", msg::general::present_name(&self.name, &self.group));
 
         if self.desc.len() > 0 {

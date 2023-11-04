@@ -1,7 +1,7 @@
 use saku_lib::pkg::data;
 use saku_lib::pkg::flask::Flask;
 use saku_lib::util::msg;
-use saku_lib::Result;
+use saku_lib::prelude::*;
 
 pub fn update_flask(flask: &Flask) -> Result<()> {
     msg::fetch(&flask.name(), &flask.url());
