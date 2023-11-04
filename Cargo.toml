@@ -7,7 +7,7 @@ repository = "https://github.com/crispybaccoon/saku"
 license = "MIT OR Apache-2.0"
 
 [[bin]]
-name = "saku"
+name = "sk"
 path = "src/main.rs"
 
 [dependencies]
