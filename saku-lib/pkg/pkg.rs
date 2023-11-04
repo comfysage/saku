@@ -8,12 +8,18 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Pkg {
+    #[serde(rename = "pkg")]
     pub name: String,
     pub desc: String,
     pub url: String,
+
+    #[serde(skip_serializing, default)]
     pub group: String,
+    #[serde(default)]
     pub install: Vec<String>,
+    #[serde(default)]
     pub update: Vec<String>,
+    #[serde(default)]
     pub root: Vec<Root>,
     path: Option<String>,
 }
@@ -70,10 +76,10 @@ impl Pkg {
 // data
 impl Pkg {
     pub fn from_string(str: String) -> Result<Pkg> {
-        serde_yaml::from_str(&str).map_err(|_| make_err!(Parse, "couldn't parse yaml"))
+        serde_yaml::from_str(&str).map_err(|e| make_err!(Parse, "couldn't parse yaml: {e}"))
     }
     pub fn to_string(&self) -> Result<String> {
-        serde_yaml::to_string(self).map_err(|_| make_err!(Parse, "couldn't create yaml from string"))
+        serde_yaml::to_string(self).map_err(|e| make_err!(Parse, "couldn't create yaml from string: {e}"))
     }
 }
 
