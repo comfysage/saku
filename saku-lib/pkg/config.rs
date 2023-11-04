@@ -2,7 +2,7 @@ use std::fs;
 
 use serde::Deserialize;
 
-use crate::{Error, Result};
+use crate::prelude::*;
 
 #[derive(Deserialize)]
 pub struct ConfigMain {

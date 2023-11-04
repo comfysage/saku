@@ -1,4 +1,6 @@
-use saku_lib::{Result, Error, exec, pkg, make_err};
+use saku_lib::prelude::*;
+use saku_lib::pkg;
+use saku_lib::exec;
 use saku_lib::util::{constants, path, io, msg};
 
 fn create_root() -> Result<()> {

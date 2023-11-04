@@ -1,11 +1,11 @@
-use crate::Error;
+use crate::prelude::*;
 
 use std::io::{Read, stdout, Write, IoSlice};
 use std::process::{Command, Stdio};
 use std::thread;
 
 /// Pipe streams are blocking, we need separate threads to monitor them without blocking the primary thread.
-fn child_stream_to_vec<R>(mut stream: R) -> Result<(), Error>
+fn child_stream_to_vec<R>(mut stream: R) -> Result<()>
 where
     R: Read + Send + 'static,
 {
@@ -35,7 +35,7 @@ where
     Ok(())
 }
 
-pub fn run(cmd: Vec<String>, pwd: &str) -> Result<(), Error> {
+pub fn run(cmd: Vec<String>, pwd: &str) -> Result<()> {
     let mut cwd: String = pwd.to_string();
     for c in cmd {
         let line = c.clone();
@@ -58,7 +58,7 @@ pub fn run(cmd: Vec<String>, pwd: &str) -> Result<(), Error> {
     Ok(())
 }
 
-pub fn run_one(cmd: String, pwd: &str) -> Result<(), Error> {
+pub fn run_one(cmd: String, pwd: &str) -> Result<()> {
     run(vec![cmd], pwd)
 }
 

@@ -1,4 +1,4 @@
-use crate::Result;
+use crate::prelude::*;
 
 use regex::Regex;
 
@@ -93,7 +93,7 @@ pub fn url_name(url: &str) -> Result<String> {
 
 mod test {
     #[allow(unused_imports)]
-    use crate::Result;
+    use crate::prelude::*;
 
     #[test]
     fn extend_url() -> Result<()> {

@@ -3,7 +3,7 @@ use saku_lib::pkg::pkg::Pkg;
 
 use saku_lib::util::{msg, path};
 
-use saku_lib::{Error, Result, make_err};
+use saku_lib::prelude::*;
 
 pub fn add(pkg: &Pkg) -> Result<()> {
     if path::pkg_exists("custom", &pkg.name) {

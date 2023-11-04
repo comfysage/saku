@@ -1,10 +1,10 @@
-use saku_lib::{Error, make_err};
+use saku_lib::prelude::*;
 use saku_lib::exec;
 use saku_lib::pkg::data::get_pkg;
 use saku_lib::pkg::pkg::Pkg;
 use saku_lib::util::{msg, path};
 
-pub fn install(pkg_name: &String) -> Result<(), Error> {
+pub fn install(pkg_name: &String) -> Result<()> {
     let p: Pkg = get_pkg(pkg_name)?;
 
     start_install(p)?;
@@ -12,7 +12,7 @@ pub fn install(pkg_name: &String) -> Result<(), Error> {
     Ok(())
 }
 
-pub fn clone_pkg(p: &Pkg) -> Result<(), Error> {
+pub fn clone_pkg(p: &Pkg) -> Result<()> {
     if path::exists(&path::repo(&p.name)) {
         // TODO: `--force` is not yet implemented
         return Err(make_err!(Conflict, "repo already cloned. try again with --force."));
@@ -25,7 +25,7 @@ pub fn clone_pkg(p: &Pkg) -> Result<(), Error> {
     Ok(())
 }
 
-pub fn run_install(p: &Pkg) -> Result<(), Error> {
+pub fn run_install(p: &Pkg) -> Result<()> {
     msg::build(&p.name, &path::repo(&p.name));
 
     if p.install.len() > 0 {
@@ -35,7 +35,7 @@ pub fn run_install(p: &Pkg) -> Result<(), Error> {
     Ok(())
 }
 
-pub fn start_install(p: Pkg) -> Result<(), Error> {
+pub fn start_install(p: Pkg) -> Result<()> {
     clone_pkg(&p)?;
 
     run_install(&p)?;
