@@ -1,10 +1,10 @@
 use std::fs;
 
-use serde::Deserialize;
+use serde::{Serialize, Deserialize};
 
 use crate::prelude::*;
 
-#[derive(Deserialize)]
+#[derive(Serialize, Deserialize)]
 pub struct ConfigMain {
     pub frozen_update: bool,
 }
@@ -17,7 +17,7 @@ impl ConfigMain {
     }
 }
 
-#[derive(Deserialize)]
+#[derive(Serialize, Deserialize)]
 pub struct Config {
     pub main: ConfigMain,
 }
@@ -34,6 +34,9 @@ impl Config {
         } else {
             Err(make_err!(IO, "no config dir."))
         }
+    }
+    pub fn to_string(&self) -> Result<String> {
+        toml::to_string(self).map_err(|_| make_err!(Parse, "couldn't create toml from string"))
     }
 }
 

@@ -61,8 +61,13 @@ fn store_repo_seed(pkg: &mut Pkg) -> Result<()> {
     Ok(())
 }
 
-pub fn save_config(default: Config) -> Result<()> {
-    todo!()
+pub fn save_config(config: Config) -> Result<()> {
+    let str = config.to_string()?;
+
+    let path = path::config();
+    fs::write(path, str)?;
+
+    Ok(())
 }
 
 pub fn get_flask(url: &str) -> Result<Flask> {
