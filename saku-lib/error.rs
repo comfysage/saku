@@ -19,6 +19,7 @@ pub enum Error {
   Conflict(String),
   IO(String),
   Regex(String),
+  Parse(String),
   #[default]
   Unexpected,
 }
@@ -31,6 +32,7 @@ impl fmt::Display for Error {
             Error::Conflict(s) => format!("Conflict: {s}"),
             Error::IO(s) => format!("IO: {s}"),
             Error::Regex(s) => format!("Regex: {s}"),
+            Error::Parse(s) => format!("Parse: {s}"),
             Error::Unexpected => format!("unexpected error"),
         };
         write!(f, "{}", msg)

@@ -70,10 +70,10 @@ impl Pkg {
 // data
 impl Pkg {
     pub fn from_string(str: String) -> Result<Pkg> {
-        serde_yaml::from_str(&str).map_err(|_| make_err!())
+        serde_yaml::from_str(&str).map_err(|_| make_err!(Parse, "couldn't parse yaml"))
     }
     pub fn to_string(&self) -> Result<String> {
-        serde_yaml::to_string(self).map_err(|_| make_err!())
+        serde_yaml::to_string(self).map_err(|_| make_err!(Parse, "couldn't create yaml from string"))
     }
 }
 
