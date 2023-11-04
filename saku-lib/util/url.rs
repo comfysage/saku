@@ -5,31 +5,15 @@ use regex::Regex;
 pub fn extend_url(url: &str) -> Result<String> {
     let mut extended = String::default();
 
-    let mut finish = false;
-    let mut foundslash = false;
     let mut founddb = false;
 
-    for s in url.clone().chars().into_iter() {
-        if finish {
-            return Ok(extended);
-        }
+    for s in url.chars().into_iter() {
         if s == '.' {
-            // founddot = true
-
-            // found address without protocol
-            if foundslash == false {
-                extended = format!("https://{}", url);
-                finish = true;
-                return Ok(extended);
-            }
-
+            extended = format!("https://{}", url);
             return Ok(extended);
         }
 
         if s == '/' {
-            foundslash = true;
-            finish = true;
-
             // found protocol
             if founddb {
                 return Ok(url.to_string());
