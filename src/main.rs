@@ -16,12 +16,15 @@ fn get_commands() -> Command {
         .literal(styling::AnsiColor::BrightWhite.on_default() | effects)
         .placeholder(styling::AnsiColor::BrightWhite.on_default() | effects);
 
+    let version = env!("PKG_VERSION");
+
     Command::new("saku")
         .about("a tiny distro-independent package manager written in Go.")
         .subcommand_required(true)
         .arg_required_else_help(true)
         .allow_external_subcommands(true)
         .styles(styles)
+        .version(version)
         .subcommand(Command::new("env").about("Show environment script"))
         .subcommand(
             Command::new("config")
