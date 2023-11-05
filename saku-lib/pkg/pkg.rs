@@ -21,7 +21,7 @@ pub struct Pkg {
     pub update: Vec<String>,
     #[serde(default)]
     pub root: Vec<Root>,
-    path: Option<String>,
+    pub path: Option<String>,
 }
 
 impl Pkg {

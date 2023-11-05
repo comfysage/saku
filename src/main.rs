@@ -1,6 +1,7 @@
+use clap::builder::styling;
 use saku_lib as saku;
 use saku_cli as cli;
-use saku::pkg::config;
+use saku::pkg::{config, data};
 use saku::pkg::pkg::Pkg;
 use saku::util::msg;
 use saku::prelude::*;
@@ -8,11 +9,22 @@ use saku::prelude::*;
 use clap::{arg, Command, Arg};
 
 fn get_commands() -> Command {
+    let effects = (styling::Effects::BOLD | styling::Effects::UNDERLINE).clear();
+    let styles = styling::Styles::styled()
+        .header(styling::AnsiColor::White.on_default() | effects)
+        .usage(styling::AnsiColor::White.on_default() | effects)
+        .literal(styling::AnsiColor::BrightWhite.on_default() | effects)
+        .placeholder(styling::AnsiColor::BrightWhite.on_default() | effects);
+
+    let version = env!("PKG_VERSION");
+
     Command::new("saku")
         .about("a tiny distro-independent package manager written in Go.")
         .subcommand_required(true)
         .arg_required_else_help(true)
         .allow_external_subcommands(true)
+        .styles(styles)
+        .version(version)
         .subcommand(Command::new("env").about("Show environment script"))
         .subcommand(
             Command::new("config")
@@ -90,6 +102,30 @@ fn get_commands() -> Command {
                         .help("List installed packages")
                 )
         )
+        .subcommand(
+            Command::new("task")
+                .about("Run a task for a package")
+                .subcommand_required(true)
+                .arg_required_else_help(true)
+                .subcommand(
+                    Command::new("clone")
+                        .about("Clone a package")
+                        .arg_required_else_help(true)
+                        .arg(arg!(<NAME> ... "Package to clone")),
+                )
+                .subcommand(
+                    Command::new("build")
+                        .about("Build a package")
+                        .arg_required_else_help(true)
+                        .arg(arg!(<NAME> ... "Package to build")),
+                )
+                .subcommand(
+                    Command::new("install")
+                        .about("Install a package")
+                        .arg_required_else_help(true)
+                        .arg(arg!(<NAME> ... "Package to install")),
+                )
+        )
 }
 
 fn main() -> Result<()> {
@@ -104,16 +140,16 @@ fn main() -> Result<()> {
             Ok(())
         }
         Some(("config", sub_matches)) => {
-            let stash_command = sub_matches.subcommand().unwrap_or(("init", sub_matches));
-            match stash_command {
+            let subcommand = sub_matches.subcommand().unwrap_or(("init", sub_matches));
+            match subcommand {
                 ("init", _) => cli::config::init(),
                 ("create", _) => cli::config::create(),
                 (&_, _) => Err(Error::Unexpected),
             }
         }
         Some(("pkg", sub_matches)) => {
-            let stash_command = sub_matches.subcommand().unwrap_or(("show", sub_matches));
-            match stash_command {
+            let subcommand = sub_matches.subcommand().unwrap_or(("show", sub_matches));
+            match subcommand {
                 ("add", sub_matches) => {
                     let name = sub_matches
                         .get_one::<String>("NAME")
@@ -236,6 +272,42 @@ fn main() -> Result<()> {
             saku_cli::list::list()?;
 
             Ok(())
+        }
+        Some(("task", sub_matches)) => {
+            let subcommand = sub_matches.subcommand().ok_or(make_err!(Missing, "subcommand missing"))?;
+            match subcommand {
+                ("clone", sub_matches) => {
+                    let name = sub_matches
+                        .get_one::<String>("NAME")
+                        .ok_or(make_err!(Missing, "no package name specified."))?;
+
+                    let pkg = data::get_pkg(name)?;
+                    cli::install::clone_pkg(&pkg)?;
+
+                    Ok(())
+                }
+                ("build", sub_matches) => {
+                    let name = sub_matches
+                        .get_one::<String>("NAME")
+                        .ok_or(make_err!(Missing, "no package name specified."))?;
+
+                    let pkg = data::get_pkg(name)?;
+                    cli::install::run_install(&pkg)?;
+
+                    Ok(())
+                }
+                ("install", sub_matches) => {
+                    let name = sub_matches
+                        .get_one::<String>("NAME")
+                        .ok_or(make_err!(Missing, "no package name specified."))?;
+
+                    let pkg = data::get_pkg(name)?;
+                    pkg.install_root()?;
+
+                    Ok(())
+                }
+                (&_, _) => Err(Error::Unexpected),
+            }
         }
         // If all subcommands are defined above, anything else is unreachable!()
         _ => {
