@@ -39,7 +39,7 @@ curl -fsSL https://raw.githubusercontent.com/CrispyBaccoon/saku/mega/install.sh 
 Setup saku environment, add this to your `.bashrc`/`.zshrc`:
 
 ```shell
-eval "$($HOME/.saku/pack/bin/saku env)"
+eval "$($HOME/.saku/root/bin/saku env)"
 ```
 
 ## Usage
@@ -48,7 +48,7 @@ Saku provides a simple command-line interface for managing packages. Here
 are some common commands:
 
 - `saku install <package>`: Installs the specified package.
-- `saku update <package>`: Update sources.
+- `saku update`: Update sources.
 - `saku upgrade <package>`: Updates the specified package to the latest version.
 - `saku remove <package>`: Removes the specified package.
 
