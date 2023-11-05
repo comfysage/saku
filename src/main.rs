@@ -116,16 +116,16 @@ fn main() -> Result<()> {
             Ok(())
         }
         Some(("config", sub_matches)) => {
-            let stash_command = sub_matches.subcommand().unwrap_or(("init", sub_matches));
-            match stash_command {
+            let subcommand = sub_matches.subcommand().unwrap_or(("init", sub_matches));
+            match subcommand {
                 ("init", _) => cli::config::init(),
                 ("create", _) => cli::config::create(),
                 (&_, _) => Err(Error::Unexpected),
             }
         }
         Some(("pkg", sub_matches)) => {
-            let stash_command = sub_matches.subcommand().unwrap_or(("show", sub_matches));
-            match stash_command {
+            let subcommand = sub_matches.subcommand().unwrap_or(("show", sub_matches));
+            match subcommand {
                 ("add", sub_matches) => {
                     let name = sub_matches
                         .get_one::<String>("NAME")
