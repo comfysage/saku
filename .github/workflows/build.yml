@@ -1,0 +1,20 @@
+name: Build & Test
+
+on:
+  push:
+    branches: [ "mega", "nightly" ]
+  pull_request:
+    branches: [ "mega", "nightly" ]
+    
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build
+      run: cargo build -vv
+    - name: Run tests
+      run: cargo test -p saku-lib -p saku-cli --verbose
