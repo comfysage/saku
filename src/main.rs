@@ -1,3 +1,4 @@
+use clap::builder::styling;
 use saku_lib as saku;
 use saku_cli as cli;
 use saku::pkg::config;
@@ -8,11 +9,19 @@ use saku::prelude::*;
 use clap::{arg, Command, Arg};
 
 fn get_commands() -> Command {
+    let effects = (styling::Effects::BOLD | styling::Effects::UNDERLINE).clear();
+    let styles = styling::Styles::styled()
+        .header(styling::AnsiColor::White.on_default() | effects)
+        .usage(styling::AnsiColor::White.on_default() | effects)
+        .literal(styling::AnsiColor::BrightWhite.on_default() | effects)
+        .placeholder(styling::AnsiColor::BrightWhite.on_default() | effects);
+
     Command::new("saku")
         .about("a tiny distro-independent package manager written in Go.")
         .subcommand_required(true)
         .arg_required_else_help(true)
         .allow_external_subcommands(true)
+        .styles(styles)
         .subcommand(Command::new("env").about("Show environment script"))
         .subcommand(
             Command::new("config")
