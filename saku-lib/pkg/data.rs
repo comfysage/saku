@@ -15,6 +15,7 @@ pub fn get_pkg_from_path(path: &str) -> Result<Pkg> {
     let fh = fs::read_to_string(fullpath)?;
     let mut pkg = Pkg::from_string(fh)?;
 
+    pkg.path = Some(path.to_string());
     pkg.safe_guard()?;
     pkg.fill()?;
 
