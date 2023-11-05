@@ -1,7 +1,7 @@
 use clap::builder::styling;
 use saku_lib as saku;
 use saku_cli as cli;
-use saku::pkg::config;
+use saku::pkg::{config, data};
 use saku::pkg::pkg::Pkg;
 use saku::util::msg;
 use saku::prelude::*;
@@ -100,6 +100,30 @@ fn get_commands() -> Command {
                         .short('i')
                         .required(false)
                         .help("List installed packages")
+                )
+        )
+        .subcommand(
+            Command::new("task")
+                .about("Run a task for a package")
+                .subcommand_required(true)
+                .arg_required_else_help(true)
+                .subcommand(
+                    Command::new("clone")
+                        .about("Clone a package")
+                        .arg_required_else_help(true)
+                        .arg(arg!(<NAME> ... "Package to clone")),
+                )
+                .subcommand(
+                    Command::new("build")
+                        .about("Build a package")
+                        .arg_required_else_help(true)
+                        .arg(arg!(<NAME> ... "Package to build")),
+                )
+                .subcommand(
+                    Command::new("install")
+                        .about("Install a package")
+                        .arg_required_else_help(true)
+                        .arg(arg!(<NAME> ... "Package to install")),
                 )
         )
 }
@@ -248,6 +272,42 @@ fn main() -> Result<()> {
             saku_cli::list::list()?;
 
             Ok(())
+        }
+        Some(("task", sub_matches)) => {
+            let subcommand = sub_matches.subcommand().ok_or(make_err!(Missing, "subcommand missing"))?;
+            match subcommand {
+                ("clone", sub_matches) => {
+                    let name = sub_matches
+                        .get_one::<String>("NAME")
+                        .ok_or(make_err!(Missing, "no package name specified."))?;
+
+                    let pkg = data::get_pkg(name)?;
+                    cli::install::clone_pkg(&pkg)?;
+
+                    Ok(())
+                }
+                ("build", sub_matches) => {
+                    let name = sub_matches
+                        .get_one::<String>("NAME")
+                        .ok_or(make_err!(Missing, "no package name specified."))?;
+
+                    let pkg = data::get_pkg(name)?;
+                    cli::install::run_install(&pkg)?;
+
+                    Ok(())
+                }
+                ("install", sub_matches) => {
+                    let name = sub_matches
+                        .get_one::<String>("NAME")
+                        .ok_or(make_err!(Missing, "no package name specified."))?;
+
+                    let pkg = data::get_pkg(name)?;
+                    pkg.install_root()?;
+
+                    Ok(())
+                }
+                (&_, _) => Err(Error::Unexpected),
+            }
         }
         // If all subcommands are defined above, anything else is unreachable!()
         _ => {
