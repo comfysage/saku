@@ -9,6 +9,9 @@ use super::flask::Flask;
 use super::pkg::Pkg;
 use super::config::Config;
 
+/// Parse a flask file and return a *Pkg*
+///
+/// - *path*: path to a flask file
 pub fn get_pkg_from_path(path: &str) -> Result<Pkg> {
     let fullpath = util::filepath::extend(path)?;
 
@@ -22,6 +25,9 @@ pub fn get_pkg_from_path(path: &str) -> Result<Pkg> {
     Ok(pkg)
 }
 
+/// Parse a flask file and return a *Pkg*
+///
+/// - *name*: name of a package
 pub fn get_pkg(name: &str) -> Result<Pkg> {
     let (path, is_dir): (String, bool) = util::path::path_determine(name.to_string())?;
 
@@ -37,6 +43,9 @@ pub fn get_pkg(name: &str) -> Result<Pkg> {
     Ok(pkg)
 }
 
+/// Write a *Pkg* to a flask file
+///
+/// - *pkg*: package to save
 pub fn save_pkg(pkg: &Pkg) -> Result<()> {
     let str = pkg.to_string()?;
 
@@ -52,6 +61,9 @@ pub fn save_pkg(pkg: &Pkg) -> Result<()> {
     Ok(())
 }
 
+/// Write a *Pkg* to flask file for a repo package
+///
+/// - *pkg*: package to save
 fn store_repo_seed(pkg: &mut Pkg) -> Result<()> {
     pkg.group = format!("repo");
 
@@ -62,6 +74,11 @@ fn store_repo_seed(pkg: &mut Pkg) -> Result<()> {
     Ok(())
 }
 
+/// Write a *Config* to the config file
+///
+/// - *config*: config to save
+///
+/// config file is located at `~/.config/saku/saku.toml`
 pub fn save_config(config: Config) -> Result<()> {
     let str = config.to_string()?;
 
@@ -71,12 +88,18 @@ pub fn save_config(config: Config) -> Result<()> {
     Ok(())
 }
 
+/// Parse a flask file and return a *Flask*
+///
+/// - *url*: url associated with flask
 pub fn get_flask(url: &str) -> Result<Flask> {
     let name = url::url_name(url)?;
     let flask = get_flask_from_name(&name)?;
     Ok(flask)
 }
 
+/// Parse a flask file and return a *Flask*
+///
+/// - *name*: name of a flask
 pub fn get_flask_from_name(name: &str) -> Result<Flask> {
     let path = path::flask(name);
     let pkg = get_pkg_from_path(&path)?;
@@ -84,6 +107,10 @@ pub fn get_flask_from_name(name: &str) -> Result<Flask> {
     Ok(flask)
 }
 
+/// Search for all flasks
+/// returns a list of names
+///
+/// searches in `~/.saku/flask/flasks`
 pub fn get_flasks() -> Result<Vec<String>> {
     let files = path::flasks()?;
     let flasks = files.iter().map(|s| path::remove_extension(s.to_string())).collect();
