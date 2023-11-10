@@ -44,6 +44,7 @@ commit_preprocessors = [
 commit_parsers = [
   { message = "^rework", group = "Rework" },
   { message = "^feat", group = "Features" },
+  { message = "^add", group = "Development" },
   { message = "^fix", group = "Bug Fixes" },
   { message = "^doc", group = "Documentation" },
   { message = "^perf", group = "Performance" },
@@ -54,7 +55,8 @@ commit_parsers = [
   { message = "^chore\\(deps\\)", skip = true },
   { message = "^chore\\(pr\\)", skip = true },
   { message = "^chore\\(pull\\)", skip = true },
-  { message = "^chore|ci", group = "Miscellaneous Tasks" },
+  { message = "^chore", group = "Miscellaneous Tasks" },
+  { message = "^workflow|ci", group = "CI" },
   { body = ".*security", group = "Security" },
   { message = "^revert", group = "Revert" },
 ]
