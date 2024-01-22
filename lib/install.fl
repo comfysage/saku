@@ -1,0 +1,31 @@
+install_file() {
+  type="$1"
+  file="$2"
+
+  file_exists "$file"
+
+  dst="$storedir/$type/$(basename $file)"
+  mkdir -p "$(dirname $dst)"
+
+  echo "$file --> $dst"
+  case $type in
+    bin)
+      install -Dm 0755 $file $dst
+      ;;
+    *)
+      ;;
+  esac
+
+  case $type in
+    bin|share)
+      lnk="$root/$type/$(basename $file)"
+      mkdir -p "$(dirname $lnk)"
+      echo "$lnk <-- $dst"
+      ln -sfT "$dst" "$lnk"
+      ;;
+    *)
+      ;;
+  esac
+}
+
+# vim: ft=bash

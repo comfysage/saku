@@ -2,6 +2,7 @@ use saku_lib::pkg::data;
 use saku_lib::pkg::flask::Flask;
 
 use saku_lib::prelude::*;
+use saku_lib::util::msg;
 
 pub fn add_with_name(name: &str, url: &str) -> Result<()> {
     let flask = Flask::new(name, url)?;
@@ -17,6 +18,7 @@ pub fn add_with_name(name: &str, url: &str) -> Result<()> {
 
 pub fn add(url: &str) -> Result<()> {
     let flask = Flask::from_url(url)?;
+    msg::add_flask(&flask.name(), &flask.url());
 
     // install flask to flask/flasks/owner.repo
     data::save_pkg(flask.pkg())?;

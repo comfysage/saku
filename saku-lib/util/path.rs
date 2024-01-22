@@ -1,6 +1,6 @@
 use std::fs;
 
-use super::constants::{ROOT_DIR, PKG_DIR, HAYASHI_DIR, CONFIG_NAME, STORE_NAME, REPO_DIR, REPO_SEED, FLASK_DIR, FLASK_DIR_NAME};
+use super::constants::{ROOT_DIR, PKG_DIR, SAKU_DIR, STORE_NAME, REPO_DIR, REPO_SEED, FLASK_DIR, FLASK_DIR_NAME};
 
 use crate::prelude::*;
 use super::filepath;
@@ -9,12 +9,8 @@ pub fn exists(path: &str) -> bool {
     filepath::exists(path)
 }
 
-pub fn config() -> String {
-	filepath::join(&HAYASHI_DIR, &CONFIG_NAME)
-}
-
 pub fn store_file() -> String {
-	filepath::join(&HAYASHI_DIR, &STORE_NAME)
+	filepath::join(&SAKU_DIR, &STORE_NAME)
 }
 
 pub fn gr(name: &str) -> String {
@@ -28,7 +24,7 @@ fn pkg_name(name: &str) -> String {
 	if name.len() == 0 {
 		panic!("argument for pkg name was nil");
 	}
-	format!("{name}.yaml")
+	format!("{name}.fl")
 }
 
 pub fn remove_extension(name: String) -> String {
@@ -43,8 +39,7 @@ pub fn remove_extension(name: String) -> String {
 
 pub fn path_pkg(group: &str, name: &str) -> String {
 	let gr = gr(group);
-	let pkg_name = pkg_name(name);
-	filepath::join(&gr, &pkg_name)
+	filepath::join(&gr, &pkg_name(&name))
 }
 
 pub fn pkg_exists(gr: &str, name: &str) -> bool {
@@ -106,6 +101,15 @@ pub fn repo_seed(path: &str) -> String {
 		panic!("argument for path was nil")
 	}
 	filepath::join(path, &REPO_SEED)
+}
+
+pub fn is_repo_seed(path: &Vec<&str>) -> bool {
+    if let Some(last_part) = path.last() {
+        if last_part == &*REPO_SEED {
+            return true
+        }
+    }
+    return false
 }
 
 pub fn repo(name: &str) -> String {

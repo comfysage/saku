@@ -1,0 +1,77 @@
+# usage
+# . path/to/init.fl pkggroup pkgname && _install
+
+set -e
+
+# -- init --
+
+DIR=$(pwd)
+
+if [[ $(basename $SHELL) -eq "bash" ]]; then
+  SOURCE=${BASH_SOURCE[0]}
+
+  # resolve $SOURCE until the file is no longer a symlink
+  while [ -L "$SOURCE" ]; do
+    DIR=$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )
+    SOURCE=$(readlink "$SOURCE")
+
+    # if $SOURCE was a relative symlink, we need to resolve it relative to the
+    # path where the symlink file was located
+    [[ $SOURCE != /* ]] && SOURCE=$DIR/$SOURCE
+  done
+
+  DIR=$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )
+elif [[ $(basename $SHELL) -eq "zsh" ]]; then
+  DIR=$( dirname "$0" )
+fi
+
+# -- load lib --
+
+. "$DIR/lib.fl"
+
+# -- load pkg --
+
+loadpkgfile "$1" "$2"
+
+# -- load fn --
+
+loadtemplates
+
+_build() {
+  msg_line "preparing installation"
+  prepare
+  msg_line "building $pkgname"
+  build
+  if ! [[ -z "$template" ]]; then
+    for tmpl in ${template[@]}; do
+      has_fn build_$tmpl && build_$tmpl
+    done
+  fi
+}
+
+_install() {
+  msg_line "installing $pkgname"
+  package
+  if ! [[ -z "$template" ]]; then
+    for tmpl in ${template[@]}; do
+      has_fn install_$tmpl && install_$tmpl
+    done
+  fi
+}
+
+_upgrade() {
+  has_fn preupdate && preupdate
+  _install
+}
+
+_cleanup() {
+  has_fn preupdate && preupdate
+  has_fn cleanup && cleanup
+  if ! [[ -z "$template" ]]; then
+    for tmpl in ${template[@]}; do
+      has_fn cleanup_$tmpl && cleanup_$tmpl
+    done
+  fi
+}
+
+# vim: ft=bash

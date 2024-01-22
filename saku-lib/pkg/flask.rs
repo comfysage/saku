@@ -32,6 +32,7 @@ impl Flask {
 impl Flask {
     fn new_pkg(name: &str, url: &str) -> Result<Pkg> {
         let mut pkg = Pkg::new(name, url);
+        pkg.desc = format!("flasks from {url}");
         pkg.group = constants::FLASK_DIR_NAME.to_string();
         pkg.fill()?;
         Ok(pkg)
@@ -68,7 +69,7 @@ impl Flask {
     pub fn update(&self) -> Result<()> {
         let name = &self.name();
         if path::repo_exists(name) {
-            exec::fetch(name)
+            exec::pull(name)
         } else {
             exec::clone(&self.full_url()?, name)
         }

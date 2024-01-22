@@ -65,3 +65,7 @@ pub fn add(name: &str) {
 pub fn remove(name: &str) {
     println!("{}", format!("removing  {}", general::name_f(name)))
 }
+
+pub fn add_flask(name: &str, url: &str) {
+    println!("{}", format!("adding flask {} from {}", general::name_f(name), general::url_f(url)))
+}

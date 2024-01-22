@@ -1,5 +1,6 @@
 use saku_lib::prelude::*;
 use saku_lib::exec;
+use saku_lib::pkg::config;
 use saku_lib::pkg::data::get_pkg;
 use saku_lib::pkg::pkg::Pkg;
 use saku_lib::util::{msg, path};
@@ -27,10 +28,9 @@ pub fn clone_pkg(p: &Pkg) -> Result<()> {
 
 pub fn run_install(p: &Pkg) -> Result<()> {
     msg::build(&p.name, &path::repo(&p.name));
+    dbg!(&p);
 
-    if p.install.len() > 0 {
-        exec::run_in_repo(&p.name, p.install.clone())?;
-    }
+    exec::build(&p.name, &p.group)?;
 
     Ok(())
 }
@@ -41,6 +41,11 @@ pub fn start_install(p: Pkg) -> Result<()> {
     run_install(&p)?;
 
     p.install_root()?;
+
+    let config = config::Config::new()?;
+    if !config.main.no_install_cleanup {
+        exec::cleanup(&p.name, &p.group)?;
+    }
 
     Ok(())
 }

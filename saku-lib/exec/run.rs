@@ -1,5 +1,7 @@
 use crate::prelude::*;
+use crate::util::constants;
 
+use std::collections::HashMap;
 use std::io::{Read, stdout, Write, IoSlice};
 use std::process::{Command, Stdio};
 use std::thread;
@@ -49,6 +51,7 @@ pub fn run(cmd: Vec<String>, pwd: &str) -> Result<()> {
         let cmd: &mut Command = &mut Command::new("bash");
         cmd.arg("-c").arg(line);
         cmd.current_dir(cwd.as_str());
+        cmd.envs(env_vars());
 
         let mut child = cmd.stdout(Stdio::piped()).stderr(Stdio::piped()).spawn()?;
         child_stream_to_vec(child.stdout.take().expect("!stdout"))?;
@@ -62,3 +65,8 @@ pub fn run_one(cmd: String, pwd: &str) -> Result<()> {
     run(vec![cmd], pwd)
 }
 
+fn env_vars() -> HashMap<String, String> {
+    let mut vars = HashMap::new();
+    vars.insert("SAKUPATH".to_string(), (&*constants::SAKU_DIR).into());
+    vars
+}

@@ -1,0 +1,47 @@
+# -- utils --
+
+msg_line() {
+  printf "\033[32;1m%s\033[m %s\n" " --$PROMPT" "$*"
+}
+
+msg() {
+  printf "\033[32;1m%s\033[m %s\n" "   $PROMPT" "$*"
+}
+
+warn() {
+  >&2 printf "\033[33;1m%s \033[mwarning: %s\n" "$PROMPT" "$*"
+}
+
+die() {
+  >&2 printf "\033[31;1m%s \033[merror: %s\n" "$PROMPT" "$*"
+  exit 1
+}
+
+confirm() {
+  >&2 printf "\033[33;1m%s \033[mconfirm? %s" "$PROMPT" "$CONFIRM_PROMPT"
+  read -r ans
+  if [ "$ans" != y ] ; then
+    >&2 printf '%s\n' 'Exiting.'
+    exit
+  fi
+}
+
+# This is just a simple wrapper around 'command -v' to avoid
+# spamming '>/dev/null' throughout this function. This also guards
+# against aliases and functions.
+has() {
+  _cmd=$(command -v "$1") 2>/dev/null || return 1
+  [ -x "$_cmd" ] || return 1
+}
+
+has_fn() {
+  _cmd=$(type -t $1) 2>/dev/null || return 1
+  [ -z "$_cmd" ] && return 1 || return 0
+}
+
+file_exists() {
+  file="$1"
+  [[ -f "$file" ]] || die "file does not exist [$file]."
+}
+
+# vim: ft=bash

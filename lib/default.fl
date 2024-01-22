@@ -1,0 +1,27 @@
+name="$(basename $2)"
+sakudir="${SAKUPATH:-"$HOME/.saku"}"
+flaskfile="$sakudir/flask/$1/$2.fl"
+srcdir="$sakudir/repo/$name"
+root="$sakudir/root"
+store="$sakudir/store"
+rootdir="$root/$name"
+storedir="$store/$name"
+
+pkgname=""
+pkgdesc=""
+url=""
+depends=()
+makedepends=()
+provides=()
+
+prepare() {
+  echo preparing "$pkgname"
+}
+
+build() {
+  echo building "$pkgname"
+}
+
+package() {
+  echo packaging "$pkgname"
+}

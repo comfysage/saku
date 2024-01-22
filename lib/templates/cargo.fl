@@ -1,0 +1,13 @@
+build_cargo() {
+  cargo build -r
+}
+
+install_cargo() {
+  for file in ${bin[@]}; do
+    install_file bin target/release/$file
+  done
+}
+
+cleanup_cargo() {
+  rm target -rf
+}

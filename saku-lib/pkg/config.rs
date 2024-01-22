@@ -1,18 +1,23 @@
 use std::fs;
-
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 
 use crate::prelude::*;
+use crate::util::constants;
+use crate::util::filepath;
 
 #[derive(Serialize, Deserialize)]
 pub struct ConfigMain {
+    // whether to update saku on `saku update`; true means no update
     pub frozen_update: bool,
+    // whether to cleanup on `saku install`; true means no cleanup
+    pub no_install_cleanup: bool,
 }
 
 impl ConfigMain {
     pub fn default() -> Self {
         Self {
             frozen_update: false,
+            no_install_cleanup: false,
         }
     }
 }
@@ -23,16 +28,22 @@ pub struct Config {
 }
 
 impl Config {
-    pub fn new() -> Result<Self> {
+    pub fn path() -> Result<String> {
         if let Some(path) = directories::ProjectDirs::from("dev", "crispybaccoon", "saku") {
-            if let Some(content) = fs::read_to_string(path.config_dir()).ok() {
-                let config: Self = toml::from_str(&content).unwrap_or(Self::default());
-                Ok(config)
-            } else {
-                return Ok(Self::default());
-            }
+            let dir = path.config_dir();
+            let path = filepath::join(dir.to_str().ok_or(make_err!())?, &*constants::CONFIG_NAME);
+            return Ok(path);
         } else {
-            Err(make_err!(IO, "no config dir."))
+            return Err(make_err!(IO, "no config dir."));
+        }
+    }
+    pub fn new() -> Result<Self> {
+        let path = Self::path()?;
+        if let Some(content) = fs::read_to_string(path).ok() {
+            let config: Self = toml::from_str(&content).unwrap_or(Self::default());
+            Ok(config)
+        } else {
+            return Ok(Self::default());
         }
     }
     pub fn to_string(&self) -> Result<String> {

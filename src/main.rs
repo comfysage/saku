@@ -19,7 +19,7 @@ fn get_commands() -> Command {
     let version = env!("PKG_VERSION");
 
     Command::new("saku")
-        .about("a tiny distro-independent package manager written in Go.")
+        .about("a distro-independent package manager written in Rust.")
         .subcommand_required(true)
         .arg_required_else_help(true)
         .allow_external_subcommands(true)
@@ -32,7 +32,7 @@ fn get_commands() -> Command {
                 .subcommand_required(true)
                 .arg_required_else_help(true)
                 .subcommand(Command::new("init").about("Setup saku"))
-                .subcommand(Command::new("create").about("Setup saku.yaml")),
+                .subcommand(Command::new("create").about("Setup saku.toml")),
         )
         .subcommand(
             Command::new("pkg")

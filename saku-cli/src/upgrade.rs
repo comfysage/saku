@@ -8,11 +8,7 @@ pub fn upgrade(name: &str) -> Result<()> {
 
     exec::pull(&pkg.name)?;
 
-    if pkg.update.len() > 0 {
-        exec::run_in_repo(&name, pkg.update.clone())?;
-    } else {
-        crate::install::run_install(&pkg)?;
-    }
+    exec::upgrade(&pkg.name, &pkg.group)?;
 
     pkg.install_root()?;
 

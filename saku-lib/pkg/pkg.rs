@@ -1,10 +1,11 @@
-use crate::pkg::root::Root;
 use crate::prelude::*;
 use crate::util::url::extend_url;
 use crate::util::{self, filepath, path};
 use crate::util::{msg, url};
 
-use serde::{Deserialize, Serialize};
+use crate::pkg::flaskfile::PkgBuild;
+
+use serde::{Serialize, Deserialize};
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Pkg {
@@ -16,11 +17,6 @@ pub struct Pkg {
     #[serde(skip_serializing, default)]
     pub group: String,
     #[serde(default)]
-    pub install: Vec<String>,
-    #[serde(default)]
-    pub update: Vec<String>,
-    #[serde(default)]
-    pub root: Vec<Root>,
     pub path: Option<String>,
 }
 
@@ -31,9 +27,6 @@ impl Pkg {
             url: format!("{url}"),
             desc: format!(""),
             group: format!(""),
-            install: vec![],
-            update: vec![],
-            root: vec![],
             path: None,
         }
     }
@@ -59,27 +52,48 @@ impl Pkg {
 
         let abs_bind = abspath?;
         let sp = abs_bind.split("/").collect::<Vec<&str>>();
-        if sp.len() < 2 {
+
+        let required_index = 2;
+        if sp.len() < required_index {
             return Err(make_err!(NotFound, "path to pkg not long enough"));
         }
-        self.group = sp[sp.len() - 2].to_string();
+        self.group = sp[sp.len() - required_index].to_string();
         Ok(())
     }
     pub fn get_path(&mut self) -> Result<String> {
         match &self.path {
             Some(s) => Ok(s.to_string()),
-            None => Ok(path::path_pkg(&self.group, &self.name)),
+            None => {
+                if self.group.len() > 0 {
+                    Ok(path::path_pkg(&self.group, &self.name))
+                } else{
+                    path::pkg_search(&self.name)
+                }
+            },
         }
     }
 }
 
 // data
 impl Pkg {
-    pub fn from_string(str: String) -> Result<Pkg> {
-        serde_yaml::from_str(&str).map_err(|e| make_err!(Parse, "couldn't parse yaml: {e}"))
+    pub fn from_string(str: String) -> Result<Self> {
+        let (_, build) = PkgBuild::parse(&str).map_err(|_| make_err!(Regex, "error while parsing flaskfile."))?;
+        let pkg = Self {
+            name: build.pkgname,
+            url: build.url,
+            desc: build.pkgdesc,
+            group: "".to_string(),
+            path: None,
+        };
+        Ok(pkg)
     }
     pub fn to_string(&self) -> Result<String> {
-        serde_yaml::to_string(self).map_err(|e| make_err!(Parse, "couldn't create yaml from string: {e}"))
+        let build = PkgBuild {
+            pkgname: self.name.to_string(),
+            pkgdesc: self.desc.to_string(),
+            url: self.url.to_string(),
+        };
+        Ok(PkgBuild::to_string(&build))
     }
 }
 
@@ -113,12 +127,6 @@ impl Pkg {
                 "url  {}",
                 msg::general::url_f(&url::shorten_url(&self.url)?)
             );
-        }
-        if self.install.len() > 0 {
-            println!("bash");
-            for s in &self.install {
-                println!("  {}", s);
-            }
         }
         Ok(())
     }

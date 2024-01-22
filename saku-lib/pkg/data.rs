@@ -56,6 +56,7 @@ pub fn save_pkg(pkg: &Pkg) -> Result<()> {
     };
 
     let path = util::path::path_pkg(group, &pkg.name);
+    dbg!("saving pkg to {}", &path);
     fs::write(path, str)?;
 
     Ok(())
@@ -82,7 +83,7 @@ fn store_repo_seed(pkg: &mut Pkg) -> Result<()> {
 pub fn save_config(config: Config) -> Result<()> {
     let str = config.to_string()?;
 
-    let path = path::config();
+    let path = Config::path()?;
     fs::write(path, str)?;
 
     Ok(())

@@ -1,7 +1,10 @@
-use saku_lib::prelude::*;
-use saku_lib::pkg;
 use saku_lib::exec;
-use saku_lib::util::{constants, path, io, msg};
+use saku_lib::pkg;
+use saku_lib::pkg::config::Config;
+use saku_lib::prelude::*;
+use saku_lib::util::{constants, io, msg, path};
+
+use crate::{flask, update};
 
 fn create_root() -> Result<()> {
     io::mkdir(constants::ROOT_DIR.to_string())?;
@@ -15,7 +18,7 @@ fn create_root() -> Result<()> {
 }
 
 pub fn init() -> Result<()> {
-    io::mkdir(constants::HAYASHI_DIR.to_string())?;
+    io::mkdir(constants::SAKU_DIR.to_string())?;
     io::mkdir(constants::PKG_DIR.to_string())?;
     io::mkdir(constants::REPO_DIR.to_string())?;
 
@@ -28,23 +31,26 @@ pub fn init() -> Result<()> {
     if !path::pkg_exists("flasks", "core") {
         msg::fetch("core", "https://github.com/crispybaccoon/pkg");
 
-        crate::flask::add_with_name("core", "crispybaccoon/pkg")?;
+        flask::add_with_name("core", "crispybaccoon/pkg")?;
     }
 
     if !path::repo_exists("core") {
-        crate::update::update()?;
+        update::update()?;
     }
 
     Ok(())
 }
 
 pub fn create() -> Result<()> {
-    let config_path = path::config();
+    let config_path = Config::path()?;
     if path::exists(&config_path) {
-        return Err(make_err!(Conflict, "config file {config_path} already exists."))
+        return Err(make_err!(
+            Conflict,
+            "config file {config_path} already exists."
+        ));
     }
     msg::create_config(&config_path);
-    pkg::data::save_config(pkg::config::Config::default())?;
+    pkg::data::save_config(Config::default())?;
 
     Ok(())
 }
