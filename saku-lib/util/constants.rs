@@ -13,7 +13,8 @@ lazy_static! {
     pub static ref PKG_DIR: String = format!("{}{}", *SAKU_DIR, "/flask");
     pub static ref ROOT_DIR: String = format!("{}{}", *SAKU_DIR, "/root");
     pub static ref STORE_DIR: String = format!("{}{}", *SAKU_DIR, "/store");
-    pub static ref LIB_DIR: String = format!("{}{}", *SAKU_DIR, "/lib");
+    pub static ref LIB_DIR_NAME: String = "lib".to_string();
+    pub static ref LIB_DIR: String = format!("{}/{}", *SAKU_DIR, *LIB_DIR_NAME);
 
     pub static ref FLASK_DIR_NAME: String = "flasks".to_string();
     pub static ref FLASK_DIR: String = format!("{}/{}", *PKG_DIR, *FLASK_DIR_NAME);
