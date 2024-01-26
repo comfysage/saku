@@ -163,7 +163,7 @@ fn main() -> Result<()> {
                     let url = sub_matches.get_one::<String>("URL");
 
                     msg::add(&name);
-                    let pkg = Pkg::new(name, url.map_or("", |url| &url));
+                    let pkg = Pkg::new(&name, url.map_or("", |url| &url));
                     cli::add::add(&pkg)?;
                     Ok(())
                 }
