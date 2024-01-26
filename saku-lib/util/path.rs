@@ -96,6 +96,53 @@ pub fn pkg_search(name: &str) -> Result<String> {
 	Err(make_err!(NotFound, "pkg not found."))
 }
 
+pub fn pkg_match(pattern: &str) -> Result<Vec<[String;2]>> {
+    let mut result = vec![];
+    let found_files = pkgs()?;
+    let found: Vec<[String;2]> = found_files.iter().map(|s| [s[0].clone(), remove_extension(s[1].clone())]).collect();
+    drop(found_files);
+
+    for i in 0..found.len() {
+        let p = &found[i];
+        if p[1].contains(pattern) {
+            result.push(p.clone());
+        }
+    }
+
+    Ok(result)
+}
+
+pub fn pkgs() -> Result<Vec<[String;2]>> {
+    let mut files = vec![];
+
+    debug!("searching for pkgs in {}", &*PKG_DIR);
+    for d in fs::read_dir(&*PKG_DIR)? {
+        let d = d?;
+        let d_path_bind = d.path();
+        let d_path = match d_path_bind.to_str() {
+            Some(s) => Ok(s),
+            None => Err(Error::Unexpected),
+        }?;
+        let group = filepath::base_name(d_path)?;
+        debug!("found pkg dir {}", &group);
+        if group == *FLASK_DIR_NAME {
+            continue
+        }
+        for f in fs::read_dir(d_path)? {
+            let f = f?;
+            let f_path_bind = f.path();
+            let f_path = match f_path_bind.to_str() {
+                Some(s) => Ok(s),
+                None => Err(Error::Unexpected),
+            }?;
+            let name = filepath::base_name(f_path)?;
+            files.push([ group.clone(), name.clone() ]);
+        }
+    }
+
+    Ok(files)
+}
+
 pub fn repo_seed(path: &str) -> String {
 	if path.len() == 0 {
 		panic!("argument for path was nil")
