@@ -225,3 +225,18 @@ pub fn flasks() -> Result<Vec<String>> {
 
     Ok(files)
 }
+
+pub fn get_store_dirs() -> Result<Vec<String>> {
+    let mut dirs = vec![];
+    for d in fs::read_dir(&*constants::STORE_DIR)? {
+        let d = d?;
+        let d_path_bind = d.path();
+        let d_path = match d_path_bind.to_str() {
+            Some(s) => Ok(s),
+            None => Err(Error::Unexpected),
+        }?;
+        let name = filepath::base_name(d_path)?;
+        dirs.push(name);
+    }
+    Ok(dirs)
+}

@@ -270,8 +270,7 @@ fn main() -> Result<()> {
         Some(("list", sub_matches)) => {
             let flag = sub_matches.get_one::<u8>("installed").ok_or(make_err!())?;
             if *flag > 0 {
-                info!("installed is true");
-
+                saku_cli::list::list_installed()?;
                 return Ok(());
             }
 
