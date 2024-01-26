@@ -7,6 +7,13 @@ use crate::pkg::flaskfile::PkgBuild;
 
 use serde::{Serialize, Deserialize};
 
+/// a package struct
+///
+/// - *name*: name of the package
+/// - *desc*: short description
+/// - *url*: url of the repo
+/// - *group*: flask group of the package
+/// - *path*: path to the flask file of the package
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Pkg {
     #[serde(rename = "pkg")]
@@ -21,6 +28,10 @@ pub struct Pkg {
 }
 
 impl Pkg {
+    /// Create a new *Pkg*
+    ///
+    /// - *name*: name of the package
+    /// - *url*: url of the repo
     pub fn new(name: &str, url: &str) -> Self {
         Self {
             name: format!("{name}"),
@@ -34,6 +45,10 @@ impl Pkg {
 
 // meta
 impl Pkg {
+    /// Auto-fill *Pkg* fields
+    ///
+    /// - *group* is infered from the path to the flask file
+    /// - *url* is extended using `util::url::extend_url`
     pub fn fill(&mut self) -> Result<()> {
         let local_path = self.get_path()?;
         self.infer_group(local_path)?;
@@ -43,6 +58,9 @@ impl Pkg {
 
         Ok(())
     }
+    /// Infer group of a package
+    ///
+    /// group is set to the dirname of the flask file of the package
     pub fn infer_group(&mut self, path: String) -> Result<()> {
         if self.group.len() > 0 {
             return Ok(());
