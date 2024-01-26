@@ -56,7 +56,7 @@ pub fn save_pkg(pkg: &Pkg) -> Result<()> {
     };
 
     let path = util::path::path_pkg(group, &pkg.name);
-    dbg!("saving pkg to {}", &path);
+    debug!("saving pkg to {:?}", &path);
     fs::write(path, str)?;
 
     Ok(())
