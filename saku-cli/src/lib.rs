@@ -1,6 +1,7 @@
 pub mod env;
 pub mod config;
 pub mod show;
+pub mod search;
 pub mod install;
 pub mod add;
 pub mod remove;

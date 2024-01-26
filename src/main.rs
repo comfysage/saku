@@ -92,6 +92,12 @@ fn get_commands() -> Command {
                 .arg(arg!(<NAME> ... "Package to show")),
         )
         .subcommand(
+            Command::new("search")
+                .about("search for a package")
+                .arg_required_else_help(true)
+                .arg(arg!(<NAME> ... "Pattern to search for")),
+        )
+        .subcommand(
             Command::new("list")
                 .about("List flasks")
                 .arg(
@@ -258,6 +264,12 @@ fn main() -> Result<()> {
                 return Err(make_err!(Missing, "not enough arguments provided"));
             }
             paths.iter().map(|name| cli::show::show(name)).collect()
+        }
+        Some(("search", sub_matches)) => {
+            let pattern = sub_matches.get_one::<String>("NAME").ok_or(make_err!(Missing, "pattern missing"))?;
+            saku_cli::search::search(&pattern)?;
+
+            Ok(())
         }
         Some(("list", sub_matches)) => {
             let flag: Option<&bool> = sub_matches.get_one("installed");
