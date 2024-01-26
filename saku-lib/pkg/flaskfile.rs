@@ -2,7 +2,7 @@
 
 use nom::{
     branch::permutation,
-    bytes::complete::{tag, take_until, take_while1},
+    bytes::complete::{tag, take_until},
     character::complete::space0,
     IResult,
 };
