@@ -6,7 +6,7 @@ use saku::pkg::pkg::Pkg;
 use saku::util::msg;
 use saku::prelude::*;
 
-use clap::{arg, Command, Arg};
+use clap::{arg, Command};
 
 fn get_commands() -> Command {
     let effects = (styling::Effects::BOLD | styling::Effects::UNDERLINE).clear();
@@ -101,11 +101,7 @@ fn get_commands() -> Command {
             Command::new("list")
                 .about("List flasks")
                 .arg(
-                    Arg::new("installed")
-                        .long("installed")
-                        .short('i')
-                        .required(false)
-                        .help("List installed packages")
+                    arg!(-i --installed ... "List installed packages")
                 )
         )
         .subcommand(
@@ -272,10 +268,9 @@ fn main() -> Result<()> {
             Ok(())
         }
         Some(("list", sub_matches)) => {
-            let flag: Option<&bool> = sub_matches.get_one("installed");
-            if flag.is_some() {
-                // list installed
-                todo!();
+            let flag = sub_matches.get_one::<u8>("installed").ok_or(make_err!())?;
+            if *flag > 0 {
+                info!("installed is true");
 
                 return Ok(());
             }
