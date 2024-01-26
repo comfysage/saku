@@ -1,6 +1,6 @@
 use std::fs;
 
-use super::constants::{ROOT_DIR, PKG_DIR, SAKU_DIR, STORE_NAME, REPO_DIR, REPO_SEED, FLASK_DIR, FLASK_DIR_NAME};
+use super::constants;
 
 use crate::prelude::*;
 use super::filepath;
@@ -10,14 +10,14 @@ pub fn exists(path: &str) -> bool {
 }
 
 pub fn store_file() -> String {
-	filepath::join(&SAKU_DIR, &STORE_NAME)
+	filepath::join(&constants::SAKU_DIR, &constants::STORE_NAME)
 }
 
 pub fn gr(name: &str) -> String {
 	if name.len() == 0 {
 		panic!("argument for group name was nil");
 	}
-	filepath::join(&PKG_DIR, name)
+	filepath::join(&constants::PKG_DIR, name)
 }
 
 fn pkg_name(name: &str) -> String {
@@ -76,7 +76,7 @@ pub fn pkg_search(name: &str) -> Result<String> {
 		return Ok(path_pkg("core", name));
 	}
 
-	for d in fs::read_dir(&*PKG_DIR)? {
+	for d in fs::read_dir(&*constants::PKG_DIR)? {
         let d = d?;
         let d_path_bind = d.path();
         let d_path = match d_path_bind.to_str() {
@@ -115,8 +115,8 @@ pub fn pkg_match(pattern: &str) -> Result<Vec<[String;2]>> {
 pub fn pkgs() -> Result<Vec<[String;2]>> {
     let mut files = vec![];
 
-    debug!("searching for pkgs in {}", &*PKG_DIR);
-    for d in fs::read_dir(&*PKG_DIR)? {
+    debug!("searching for pkgs in {}", &*constants::PKG_DIR);
+    for d in fs::read_dir(&*constants::PKG_DIR)? {
         let d = d?;
         let d_path_bind = d.path();
         let d_path = match d_path_bind.to_str() {
@@ -125,7 +125,7 @@ pub fn pkgs() -> Result<Vec<[String;2]>> {
         }?;
         let group = filepath::base_name(d_path)?;
         debug!("found pkg dir {}", &group);
-        if group == *FLASK_DIR_NAME {
+        if group == *constants::FLASK_DIR_NAME {
             continue
         }
         for f in fs::read_dir(d_path)? {
@@ -147,12 +147,12 @@ pub fn repo_seed(path: &str) -> String {
 	if path.len() == 0 {
 		panic!("argument for path was nil")
 	}
-	filepath::join(path, &REPO_SEED)
+	filepath::join(path, &constants::REPO_SEED)
 }
 
 pub fn is_repo_seed(path: &Vec<&str>) -> bool {
     if let Some(last_part) = path.last() {
-        if last_part == &*REPO_SEED {
+        if last_part == &*constants::REPO_SEED {
             return true
         }
     }
@@ -163,7 +163,7 @@ pub fn repo(name: &str) -> String {
 	if name.len() == 0 {
 		panic!("argument for repo name was nil")
 	}
-	filepath::join(&REPO_DIR, name)
+	filepath::join(&constants::REPO_DIR, name)
 }
 
 pub fn repo_exists(name: &str) -> bool {
@@ -181,7 +181,7 @@ pub fn root_dir(dir: &str) -> String {
 	if dir.len() == 0 {
 		panic!("argument for type dir was nil")
 	}
-	filepath::join(&ROOT_DIR, dir)
+	filepath::join(&constants::ROOT_DIR, dir)
 }
 
 pub fn root_file(dir: &str, path: &str) -> String {
@@ -199,20 +199,20 @@ pub fn flask(name: &str) -> String {
 	if name.len() == 0 {
 		panic!("argument for flask name was nil")
 	}
-    filepath::join(&FLASK_DIR, &pkg_name(name))
+    filepath::join(&constants::FLASK_DIR, &pkg_name(name))
 }
 
 pub fn flask_dir(name: &str) -> String {
 	if name.len() == 0 {
 		panic!("argument for flask name was nil")
 	}
-    filepath::join(&repo(name), &FLASK_DIR_NAME)
+    filepath::join(&repo(name), &constants::FLASK_DIR_NAME)
 }
 
 pub fn flasks() -> Result<Vec<String>> {
     let mut files = vec![];
     
-    for f in fs::read_dir(&*FLASK_DIR)? {
+    for f in fs::read_dir(&*constants::FLASK_DIR)? {
         let f = f?;
         let f_path_bind = f.path();
         let f_path = match f_path_bind.to_str() {
