@@ -181,7 +181,10 @@ pub fn formatted_builder() -> Builder {
             width: max_width,
         });
 
-        writeln!(f, " {} {} {}", level, target, record.args(),)
+        match record.level() {
+            Level::Info => writeln!(f, " {} {}", level, record.args(),),
+            _ => writeln!(f, " {} {} {}", level, target, record.args(),),
+        }
     });
 
     builder
@@ -211,7 +214,10 @@ pub fn formatted_timed_builder() -> Builder {
 
         let time = f.timestamp_millis();
 
-        writeln!(f, " {} {} {} {}", time, level, target, record.args(),)
+        match record.level() {
+            Level::Info => writeln!(f, " {} {} {}", time, level, record.args(),),
+            _ => writeln!(f, " {} {} {} {}", time, level, target, record.args(),),
+        }
     });
 
     builder
