@@ -40,19 +40,25 @@ fn get_commands() -> Command {
                 .subcommand_required(true)
                 .arg_required_else_help(true)
                 .subcommand(
-                    Command::new("show")
-                        .about("Show pkg configuration")
-                        .arg_required_else_help(true),
-                )
-                .subcommand(
                     Command::new("add")
                         .about("Add pkg configuration")
-                        .arg_required_else_help(true),
+                        .arg_required_else_help(true)
+                        .args([
+                            arg!(<NAME> "Package to add"),
+                            arg!([URL] "Package url"),
+                        ]),
                 )
                 .subcommand(
                     Command::new("remove")
                         .about("Remove pkg configuration")
-                        .arg_required_else_help(true),
+                        .arg_required_else_help(true)
+                        .arg(arg!(<NAME> "Package to remove")),
+                )
+                .subcommand(
+                    Command::new("show")
+                        .about("Show pkg configuration")
+                        .arg_required_else_help(true)
+                        .arg(arg!(<NAME> "Package to show")),
                 ),
         )
         .subcommand(
