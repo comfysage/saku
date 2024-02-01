@@ -143,7 +143,7 @@ fn get_commands() -> Command {
 }
 
 fn main() -> Result<()> {
-    pretty_env_logger::init();
+    saku_logger::init();
     let config = config::Config::new()?;
 
     let matches = get_commands().get_matches();
