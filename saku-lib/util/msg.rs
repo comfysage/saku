@@ -1,7 +1,7 @@
 use super::colors::{COLOR_BLUE, COLOR_CYAN, COLOR_MAGENTA, COLOR_RESET, COLOR_YELLOW};
 
 pub mod general {
-    use crate::util::msg::{COLOR_CYAN, COLOR_MAGENTA, COLOR_RESET, COLOR_YELLOW};
+    use super::{COLOR_BLUE, COLOR_CYAN, COLOR_MAGENTA, COLOR_RESET, COLOR_YELLOW};
     pub fn name_f(name: &str) -> String {
         format!("{COLOR_MAGENTA}{}{COLOR_RESET}", name)
     }
@@ -12,6 +12,10 @@ pub mod general {
 
     pub fn url_f(url: &str) -> String {
         format!("{COLOR_YELLOW}{url}{COLOR_RESET}")
+    }
+
+    pub fn path_f(path: &str) -> String {
+        format!("{COLOR_BLUE}{path}{COLOR_RESET}")
     }
 }
 
@@ -30,9 +34,9 @@ pub fn build(name: &str, path: &str) {
     println!(
         "{}",
         format!(
-            "building {} at {COLOR_BLUE}{}{COLOR_RESET} ...",
+            "building {} at {} ...",
             general::name_f(name),
-            path
+            general::path_f(path)
         )
     );
 }
@@ -52,8 +56,8 @@ pub fn create_config(path: &str) {
     println!(
         "{}",
         format!(
-            "creating config file at {COLOR_BLUE}{}{COLOR_RESET} ...",
-            path
+            "creating config file at {} ...",
+            general::path_f(path)
         )
     )
 }
