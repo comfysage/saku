@@ -1,3 +1,4 @@
+use log::info;
 use super::colors::{COLOR_BLUE, COLOR_CYAN, COLOR_MAGENTA, COLOR_RESET, COLOR_YELLOW};
 
 pub mod general {
@@ -20,7 +21,7 @@ pub mod general {
 }
 
 pub fn clone(name: &str, url: &str) {
-    println!(
+    info!(
         "{}",
         format!(
             "cloning {} from {} ...",
@@ -31,7 +32,7 @@ pub fn clone(name: &str, url: &str) {
 }
 
 pub fn build(name: &str, path: &str) {
-    println!(
+    info!(
         "{}",
         format!(
             "building {} at {} ...",
@@ -42,7 +43,7 @@ pub fn build(name: &str, path: &str) {
 }
 
 pub fn fetch(name: &str, url: &str) {
-    println!(
+    info!(
         "{}",
         format!(
             "fetching {} from {} ...",
@@ -53,7 +54,7 @@ pub fn fetch(name: &str, url: &str) {
 }
 
 pub fn create_config(path: &str) {
-    println!(
+    info!(
         "{}",
         format!(
             "creating config file at {} ...",
@@ -63,17 +64,17 @@ pub fn create_config(path: &str) {
 }
 
 pub fn add(name: &str) {
-    println!("{}", format!("adding  {}", general::name_f(name)))
+    info!("{}", format!("adding  {}", general::name_f(name)))
 }
 
 pub fn remove(name: &str) {
-    println!("{}", format!("removing  {}", general::name_f(name)))
+    info!("{}", format!("removing  {}", general::name_f(name)))
 }
 
 pub fn add_flask(name: &str, url: &str) {
-    println!("{}", format!("adding flask {} from {}", general::name_f(name), general::url_f(url)))
+    info!("{}", format!("adding flask {} from {}", general::name_f(name), general::url_f(url)))
 }
 
 pub fn changelog(name: &str, path: &str) {
-    println!("{}", format!("showing changes for {} at {COLOR_BLUE}{}{COLOR_RESET}", general::name_f(name), path))
+    info!("{}", format!("showing changes for {} at {}", general::name_f(name), general::path_f(path)))
 }
