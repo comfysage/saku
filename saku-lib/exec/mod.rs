@@ -20,7 +20,7 @@ pub fn pull(name: &str) -> Result<()> {
   run(pull_cmd(), &util::path::repo(name))
 }
 
-pub fn changelof(name: &str) -> Result<()> {
+pub fn changelog(name: &str) -> Result<()> {
   run_one(log_cmd(), &util::path::repo(name))
 }
 
