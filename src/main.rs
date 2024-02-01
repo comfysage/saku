@@ -134,6 +134,12 @@ fn get_commands() -> Command {
                         .arg(arg!(<NAME> ... "Package to install")),
                 )
         )
+        .subcommand(
+            Command::new("changelog")
+                .about("show package changelog")
+                .arg_required_else_help(false)
+                .arg(arg!([NAME] "Package name"))
+        )
 }
 
 fn main() -> Result<()> {
@@ -320,6 +326,13 @@ fn main() -> Result<()> {
                 }
                 (&_, _) => Err(Error::Unexpected),
             }
+        }
+        Some(("changelog", sub_matches)) => {
+            let name: String = sub_matches
+                .get_one::<String>("NAME").map_or("saku".to_string(), |v| v.to_owned());
+
+            cli::changelog::changelog(&name)?;
+            Ok(())
         }
         // If all subcommands are defined above, anything else is unreachable!()
         _ => {

@@ -69,3 +69,7 @@ pub fn remove(name: &str) {
 pub fn add_flask(name: &str, url: &str) {
     println!("{}", format!("adding flask {} from {}", general::name_f(name), general::url_f(url)))
 }
+
+pub fn changelog(name: &str, path: &str) {
+    println!("{}", format!("showing changes for {} at {COLOR_BLUE}{}{COLOR_RESET}", general::name_f(name), path))
+}
