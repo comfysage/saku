@@ -4,10 +4,10 @@ loadpkgfile() {
   . "$DIR/default.fl" "$1" "$2"
 
   cd $srcdir || die "$srcdir does not exist"
-  msg_line "srcdir [ $srcdir ] "
+  debug "srcdir [ $srcdir ] "
 
   file_exists $flaskfile
-  msg "pkg [ $flaskfile ] "
+  debug "pkg [ $flaskfile ] "
   . "$flaskfile"
 
   . "$DIR/install.fl"
@@ -16,7 +16,7 @@ loadpkgfile() {
 loadtemplates() {
   if ! [[ -z "$template" ]]; then
     for tmpl in ${template[@]}; do
-      . "$DIR/templates/$tmpl.fl" && msg_line "adding template $tmpl" || die "template '$tmpl' does not exist"
+      . "$DIR/templates/$tmpl.fl" && debug "adding template $tmpl" || die "template '$tmpl' does not exist"
     done
   fi
 }

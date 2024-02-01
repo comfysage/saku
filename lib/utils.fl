@@ -1,5 +1,13 @@
 # -- utils --
 
+trace() {
+  [[ "$RUST_LOG" == "trace" ]] && printf "\033[32;1m%s\033[m %s\n" " --$PROMPT" "$*"
+}
+
+debug() {
+  [[ "$RUST_LOG" == "trace" || "$RUST_LOG" == "debug" ]] && printf "\033[32;1m%s\033[m %s\n" "   $PROMPT" "$*"
+}
+
 msg_line() {
   printf "\033[32;1m%s\033[m %s\n" " --$PROMPT" "$*"
 }

@@ -15,13 +15,13 @@ makedepends=()
 provides=()
 
 prepare() {
-  echo preparing "$pkgname"
+  trace preparing "$pkgname"
 }
 
 build() {
-  echo building "$pkgname"
+  trace building "$pkgname"
 }
 
 package() {
-  echo packaging "$pkgname"
+  trace packaging "$pkgname"
 }

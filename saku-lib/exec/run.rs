@@ -68,5 +68,7 @@ pub fn run_one(cmd: String, pwd: &str) -> Result<()> {
 fn env_vars() -> HashMap<String, String> {
     let mut vars = HashMap::new();
     vars.insert("SAKUPATH".to_string(), (&*constants::SAKU_DIR).into());
+    let log_env = ::std::env::var("RUST_LOG").unwrap_or("info".to_string());
+    vars.insert("RUST_LOG".to_string(), log_env);
     vars
 }
