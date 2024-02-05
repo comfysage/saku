@@ -8,7 +8,7 @@ use saku_lib::util::{msg, path};
 pub fn install(pkg_name: &String) -> Result<()> {
     let p: Pkg = get_pkg(pkg_name)?;
 
-    start_install(p)?;
+    install_pkg(p)?;
 
     Ok(())
 }
@@ -27,7 +27,7 @@ pub fn clone_pkg(p: &Pkg) -> Result<()> {
     Ok(())
 }
 
-pub fn run_install(p: &Pkg) -> Result<()> {
+pub fn build_pkg(p: &Pkg) -> Result<()> {
     msg::build(&p.name, &path::repo(&p.name));
     debug!("{:?}", &p);
 
@@ -36,10 +36,10 @@ pub fn run_install(p: &Pkg) -> Result<()> {
     Ok(())
 }
 
-pub fn start_install(p: Pkg) -> Result<()> {
+pub fn install_pkg(p: Pkg) -> Result<()> {
     clone_pkg(&p)?;
 
-    run_install(&p)?;
+    build_pkg(&p)?;
 
     p.install_root()?;
 

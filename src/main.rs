@@ -310,7 +310,7 @@ fn main() -> Result<()> {
                         .ok_or(make_err!(Missing, "no package name specified."))?;
 
                     let pkg = data::get_pkg(name)?;
-                    cli::install::run_install(&pkg)?;
+                    cli::install::build_pkg(&pkg)?;
 
                     Ok(())
                 }
