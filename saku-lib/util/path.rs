@@ -5,6 +5,8 @@ use super::constants;
 use crate::prelude::*;
 use super::filepath;
 
+use glob::glob;
+
 pub fn exists(path: &str) -> bool {
     filepath::exists(path)
 }
@@ -239,4 +241,24 @@ pub fn get_store_dirs() -> Result<Vec<String>> {
         dirs.push(name);
     }
     Ok(dirs)
+}
+
+pub fn store_dir(name: &str) -> String {
+    filepath::join(&*constants::STORE_DIR, name)
+}
+
+pub fn get_stored_files(name: &str) -> Result<Vec<String>> {
+    let mut files = vec![];
+    for d in fs::read_dir(store_dir(name))? {
+        let d = d?;
+        let d_path_bind = d.path();
+        let d_path = match d_path_bind.to_str() {
+            Some(s) => Ok(s),
+            None => Err(Error::Unexpected),
+        }?;
+        for entry in glob(&format!("{d_path}/**/*"))? {
+            files.push(entry?.to_str().unwrap().to_string());
+        }
+    }
+    Ok(files)
 }

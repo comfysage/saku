@@ -50,3 +50,15 @@ impl From<regex::Error> for Error {
         Self::Regex(format!("regex error {}", value.to_string()))
     }
 }
+
+impl From<glob::GlobError> for Error {
+    fn from(value: glob::GlobError) -> Self {
+        Self::IO(format!("glob error {}", value.to_string()))
+    }
+}
+
+impl From<glob::PatternError> for Error {
+    fn from(value: glob::PatternError) -> Self {
+        Self::IO(format!("glob error {}", value.to_string()))
+    }
+}
