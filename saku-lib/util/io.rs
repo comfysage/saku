@@ -7,7 +7,7 @@ pub fn mkdir(path: String) -> Result<bool> {
         return Ok(false);
     }
 
-    std::fs::create_dir(path)?;
+    std::fs::create_dir_all(path)?;
 
     Ok(true)
 }
