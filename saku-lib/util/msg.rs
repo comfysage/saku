@@ -78,3 +78,7 @@ pub fn add_flask(name: &str, url: &str) {
 pub fn changelog(name: &str, path: &str) {
     info!("{}", format!("showing changes for {} at {}", general::name_f(name), general::path_f(path)))
 }
+
+pub fn link(target: &str, path: &str) {
+    info!("{}", format!("linking {} to {}", general::path_f(path), general::path_f(target)))
+}
