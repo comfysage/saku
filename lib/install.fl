@@ -1,29 +1,18 @@
-install_file() {
-  type="$1"
-  file="$2"
+store() {
+  src="$srcdir/$1"
+  dst="$storedir/$2"
 
-  file_exists "$file"
+  [[ -f "$src" || -d "$src" ]] || die "src does not exist [$src]"
 
-  dst="$storedir/$type/$(basename $file)"
   mkdir -p "$(dirname $dst)"
 
-  echo "$file --> $dst"
+  echo "$src --> $dst"
   case $type in
     bin)
-      install -Dm 0755 $file $dst
+      install -Dm 0755 "$src" "$dst"
       ;;
     *)
-      ;;
-  esac
-
-  case $type in
-    bin|share)
-      lnk="$root/$type/$(basename $file)"
-      mkdir -p "$(dirname $lnk)"
-      echo "$lnk <-- $dst"
-      ln -sfT "$dst" "$lnk"
-      ;;
-    *)
+      install -Dm 0644 "$src" "$dst"
       ;;
   esac
 }
