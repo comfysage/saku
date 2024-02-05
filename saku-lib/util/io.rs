@@ -1,5 +1,3 @@
-use std::fs;
-
 use crate::prelude::*;
 
 use super::path;
@@ -9,7 +7,7 @@ pub fn mkdir(path: String) -> Result<bool> {
         return Ok(false);
     }
 
-    fs::create_dir(path)?;
+    std::fs::create_dir(path)?;
 
     Ok(true)
 }
