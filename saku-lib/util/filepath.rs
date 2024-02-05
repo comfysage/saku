@@ -76,3 +76,12 @@ pub fn base_name(path: &str) -> Result<String> {
         .ok_or(Error::Unexpected)?
         .to_string())
 }
+
+pub fn parent_dir(path: &str) -> Result<String> {
+    Ok(Path::new(path)
+        .parent()
+        .ok_or(Error::Unexpected)?
+        .to_str()
+        .ok_or(Error::Unexpected)?
+        .to_string())
+}
