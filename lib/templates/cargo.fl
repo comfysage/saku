@@ -4,7 +4,7 @@ build_cargo() {
 
 install_cargo() {
   for file in ${bin[@]}; do
-    install_file bin target/release/$file
+    store "target/release/$file" "bin/$file"
   done
 }
 
