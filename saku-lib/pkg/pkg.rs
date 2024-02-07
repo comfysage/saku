@@ -95,7 +95,10 @@ impl Pkg {
 // data
 impl Pkg {
     pub fn from_string(str: String) -> Result<Self> {
-        let (_, build) = PkgBuild::parse(&str).map_err(|_| make_err!(Regex, "error while parsing flaskfile."))?;
+        let (_, build) = PkgBuild::parse(&str).map_err(|e| {
+            let e = e.to_string();
+            make_err!(Parse, "{e}")
+            })?;
         let pkg = Self {
             name: build.pkgname,
             url: build.url,
