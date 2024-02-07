@@ -58,7 +58,7 @@ impl PkgBuild {
     }
 
     pub fn to_string(&self) -> String {
-        format!("pkgname=\"{}\"\nurl=\"{}\"\npkgdesc=\"{}\"", self.pkgname, self.url, self.pkgdesc)
+        format!("pkgname=\"{}\"\nurl=\"{}\"\npkgdesc=\"{}\"\n", self.pkgname, self.url, self.pkgdesc)
     }
 }
 
