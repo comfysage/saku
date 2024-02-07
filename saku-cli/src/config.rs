@@ -28,7 +28,6 @@ pub fn init() -> Result<()> {
     if !filepath::exists(&*constants::LIB_DIR) {
         let repo_dir: String = path::repo("saku");
         let lib_dir: String = constants::LIB_DIR_NAME.to_string();
-        dbg!(&repo_dir, &lib_dir);
         let target = filepath::join(&repo_dir, &lib_dir);
         io::link(&target, &*constants::LIB_DIR)?;
     }
