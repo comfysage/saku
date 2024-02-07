@@ -13,8 +13,8 @@ printf " -\033[35m building\033[0m saku\n"
 cargo build -r
 
 printf " -\033[35m setting up\033[0m environment\n"
-./saku config init
+./target/release/sk config init
 
 printf " -\033[35m finishing\033[0m installation\n"
-./saku task install saku
+./target/release/sk task install saku
 
