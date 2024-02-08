@@ -2,7 +2,7 @@ build_cargo() {
   cargo build -r
 }
 
-install_cargo() {
+package_cargo() {
   for file in ${bin[@]}; do
     store "target/release/$file" "bin/$file"
   done

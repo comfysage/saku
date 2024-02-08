@@ -54,7 +54,7 @@ _install() {
   package
   if ! [[ -z "$template" ]]; then
     for tmpl in ${template[@]}; do
-      has_fn install_$tmpl && install_$tmpl
+      has_fn package_$tmpl && package_$tmpl
     done
   fi
 }
