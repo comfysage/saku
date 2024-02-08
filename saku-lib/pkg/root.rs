@@ -21,10 +21,11 @@ impl Pkg {
             debug!("cleaning up artifacts in store");
             let files = path::get_stored_bin(&self.name)?;
             for entry in files {
-                info!("cleaning up artifact {}", msg::general::path_f(&entry));
+                debug!("removing artifact {}", msg::general::path_f(&entry));
                 exec::unlink(&entry)?;
             }
             let store_path = path::store_dir(&self.name);
+            debug!("removing artifact {}",  msg::general::path_f(&store_path));
             io::rmdir(&store_path)?;
             io::mkdir(store_path)?;
         }
