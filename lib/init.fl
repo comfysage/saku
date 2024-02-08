@@ -38,9 +38,9 @@ loadpkgfile "$1" "$2"
 loadtemplates
 
 _build() {
-  msg_line "preparing installation"
+  trace "preparing installation"
   prepare
-  msg_line "building $pkgname"
+  trace "building $pkgname"
   build
   if ! [[ -z "$template" ]]; then
     for tmpl in ${template[@]}; do
@@ -50,7 +50,7 @@ _build() {
 }
 
 _install() {
-  msg_line "installing $pkgname"
+  trace "installing $pkgname"
   package
   if ! [[ -z "$template" ]]; then
     for tmpl in ${template[@]}; do
