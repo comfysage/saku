@@ -60,8 +60,8 @@ _install() {
 }
 
 _upgrade() {
+  _build
   has_fn preupdate && preupdate
-  _install
 }
 
 _cleanup() {
