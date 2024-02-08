@@ -12,6 +12,14 @@ pub fn mkdir(path: String) -> Result<bool> {
     Ok(true)
 }
 
+pub fn rmdir(path: &str) -> Result<()> {
+    if path::exists(&path) {
+        // [NOTE]: removes a directory after cleaning its contents or removes a symlink
+        std::fs::remove_dir_all(&path)?;
+    }
+    Ok(())
+}
+
 pub fn link(target: &str, path: &str) -> Result<()> {
     std::os::unix::fs::symlink(target, path)?;
 

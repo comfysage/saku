@@ -24,8 +24,9 @@ impl Pkg {
                 info!("cleaning up artifact {}", msg::general::path_f(&entry));
                 exec::unlink(&entry)?;
             }
-            std::fs::remove_dir_all(&path::store_dir(&self.name))?;
-            io::mkdir(path::store_dir(&self.name))?;
+            let store_path = path::store_dir(&self.name);
+            io::rmdir(&store_path)?;
+            io::mkdir(store_path)?;
         }
         exec::install(&self.name, &self.group)?;
         Ok(())

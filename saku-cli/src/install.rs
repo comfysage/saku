@@ -3,6 +3,7 @@ use saku_lib::exec;
 use saku_lib::pkg::config;
 use saku_lib::pkg::data::get_pkg;
 use saku_lib::pkg::pkg::Pkg;
+use saku_lib::util::io;
 use saku_lib::util::{msg, path};
 
 pub fn install(pkg_name: &String) -> Result<()> {
@@ -17,7 +18,7 @@ pub fn clone_pkg(p: &Pkg) -> Result<()> {
     if path::exists(&path::repo(&p.name)) {
         info!("removing existing repo at {}", msg::general::path_f(&path::repo(&p.name)));
         // [NOTE]: removes a directory after cleaning its contents or removes a symlink
-        std::fs::remove_dir_all(&path::repo(&p.name))?;
+        io::rmdir(&path::repo(&p.name))?;
     }
 
     msg::clone(&p.name, &p.url);
