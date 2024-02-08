@@ -257,7 +257,11 @@ pub fn get_stored_files(name: &str) -> Result<Vec<String>> {
             None => Err(Error::Unexpected),
         }?;
         for entry in glob(&format!("{d_path}/**/*"))? {
-            files.push(entry?.to_str().unwrap().to_string());
+            let name = entry?.to_str().unwrap().to_string();
+            let base_name = filepath::base_name(&name)?;
+            if base_name.chars().nth(0) != Some('.') {
+                files.push(name);
+            }
         }
     }
     Ok(files)
