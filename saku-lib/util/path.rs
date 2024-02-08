@@ -267,6 +267,32 @@ pub fn get_stored_files(name: &str) -> Result<Vec<String>> {
     Ok(files)
 }
 
+pub fn get_stored_dirs(name: &str) -> Result<Vec<String>> {
+    let mut dirs = vec![];
+    for d in fs::read_dir(store_dir(name))? {
+        let d = d?;
+        let d_path_bind = d.path();
+        let d_path = match d_path_bind.to_str() {
+            Some(s) => Ok(s),
+            None => Err(Error::Unexpected),
+        }?;
+        dirs.push(d_path.to_string());
+    }
+    Ok(dirs)
+}
+
+pub fn get_artifact_dirs(name: &str) -> Result<Vec<String>> {
+    let mut dirs = get_stored_dirs(name)?;
+    for i in 0..dirs.len() {
+        let p = dirs[i].clone();
+        if filepath::base_name(&p)? == "bin" {
+            dirs.remove(i);
+            return Ok(dirs);
+        }
+    }
+    Ok(dirs)
+}
+
 pub fn get_stored_bin(name: &str) -> Result<Vec<String>> {
     let mut files = vec![];
     let store_path = store_dir(name);

@@ -25,8 +25,11 @@ impl Pkg {
                 exec::unlink(&entry)?;
             }
             let store_path = path::store_dir(&self.name);
-            debug!("removing artifact {}",  msg::general::path_f(&store_path));
-            io::rmdir(&store_path)?;
+            let dirs = path::get_artifact_dirs(&self.name)?;
+            for entry in dirs {
+                debug!("removing artifact {}",  msg::general::path_f(&entry));
+                io::rmdir(&entry)?;
+            }
             io::mkdir(store_path)?;
         }
         exec::install(&self.name, &self.group)?;
