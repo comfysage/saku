@@ -24,6 +24,10 @@ pub fn changelog(name: &str) -> Result<()> {
   run_one(log_cmd(), &util::path::repo(name))
 }
 
+pub fn unlink(path: &str) -> Result<()> {
+  run_one(format!("unlink {path}"), &util::constants::SAKU_DIR)
+}
+
 pub fn root(name: &str, path: &str, prefix: &str) -> Result<()> {
   run_one(root_cmd(name, path, prefix)?, &util::constants::ROOT_DIR)
 }
