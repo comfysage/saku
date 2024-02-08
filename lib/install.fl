@@ -7,14 +7,13 @@ store() {
   mkdir -p "$(dirname $dst)"
 
   echo "$src --> $dst"
-  case $type in
-    bin)
-      install -Dm 0755 "$src" "$dst"
-      ;;
-    *)
-      install -Dm 0644 "$src" "$dst"
-      ;;
-  esac
+  perms=0644
+  [[ -x "$src" ]] && perms=0755
+  if [[ -f "$src" ]]; then
+    install -Dm $perms "$src" "$dst"
+  elif [[ -d "$src" ]]; then
+    cp -r "$src" "$dst"
+  fi
 }
 
 # vim: ft=bash
