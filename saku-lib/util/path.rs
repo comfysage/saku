@@ -262,3 +262,12 @@ pub fn get_stored_files(name: &str) -> Result<Vec<String>> {
     }
     Ok(files)
 }
+
+pub fn get_stored_bin(name: &str) -> Result<Vec<String>> {
+    let mut files = vec![];
+    let store_path = store_dir(name);
+    for entry in glob(&format!("{store_path}/bin/*"))? {
+        files.push(entry?.to_str().unwrap().to_string());
+    }
+    Ok(files)
+}

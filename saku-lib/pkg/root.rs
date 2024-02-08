@@ -19,6 +19,11 @@ impl Pkg {
         let has_artifacts = !io::mkdir(path::store_dir(&self.name))?;
         if has_artifacts {
             debug!("cleaning up artifacts in store");
+            let files = path::get_stored_bin(&self.name)?;
+            for entry in files {
+                info!("cleaning up artifact {}", msg::general::path_f(&entry));
+                exec::unlink(&entry)?;
+            }
             std::fs::remove_dir_all(&path::store_dir(&self.name))?;
             io::mkdir(path::store_dir(&self.name))?;
         }
