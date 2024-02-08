@@ -16,7 +16,7 @@ impl Pkg {
     }
     pub fn store(&self) -> Result<()> {
         trace!("storing files");
-        let has_artifacts = io::mkdir(path::store_dir(&self.name))?;
+        let has_artifacts = !io::mkdir(path::store_dir(&self.name))?;
         if has_artifacts {
             debug!("cleaning up artifacts in store");
             std::fs::remove_dir_all(&path::store_dir(&self.name))?;
