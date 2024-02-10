@@ -17,7 +17,6 @@ pub fn install(pkg_name: &String) -> Result<()> {
 pub fn clone_pkg(p: &Pkg) -> Result<()> {
     if path::exists(&path::repo(&p.name)) {
         info!("removing existing repo at {}", msg::general::path_f(&path::repo(&p.name)));
-        // [NOTE]: removes a directory after cleaning its contents or removes a symlink
         io::rmdir(&path::repo(&p.name))?;
     }
 
