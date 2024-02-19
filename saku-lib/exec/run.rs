@@ -48,7 +48,7 @@ pub fn run(cmd: Vec<String>, pwd: &str) -> Result<()> {
             continue;
         }
         drop(el);
-        let cmd: &mut Command = &mut Command::new("bash");
+        let cmd: &mut Command = &mut fake_tty::bash_command("bash")?;
         cmd.arg("-c").arg(line);
         cmd.current_dir(cwd.as_str());
         cmd.envs(env_vars());
