@@ -40,15 +40,15 @@ impl Pkg {
         let files = path::get_stored_files(&self.name)?;
         debug!("{:?}", files);
         for entry in &files {
+            if filepath::is_dir(&entry) {
+                debug!("skipping dir {entry}");
+                continue;
+            }
             self.link_entry(entry)?;
         }
         Ok(())
     }
     pub fn link_entry(&self, path: &str) -> Result<()> {
-        if filepath::is_dir(&path) {
-            debug!("skipping dir {path}");
-            return Ok(());
-        }
         let rel = filepath::get_relative(&path::store_dir(&self.name), path)?;
         debug!("found {}", rel);
         let root_path = filepath::join(&*constants::ROOT_DIR, &rel);
