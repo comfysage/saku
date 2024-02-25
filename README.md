@@ -33,7 +33,7 @@ Homebrew.
 Run the installer using curl:
 
 ```shell
-curl -fsSL https://raw.githubusercontent.com/CrispyBaccoon/saku/mega/install.sh | sh
+curl -fsSL https://github.com/crispybaccoon/saku/raw/mega/install.sh | sh
 ```
 
 Setup saku environment, add this to your `.bashrc`/`.zshrc`:
