@@ -1,5 +1,3 @@
-use std::fs;
-
 use crate::prelude::*;
 use crate::exec;
 use crate::pkg::pkg::Pkg;
@@ -62,20 +60,42 @@ impl Pkg {
         Ok(())
     }
     pub fn uninstall_root(&self) -> Result<()> {
-        for d in fs::read_dir(path::root_dir(&format!("{}/bin", self.name)))? {
-            let d = d?;
-            let d_path_bind = d.path();
-            let d_path = match d_path_bind.to_str() {
-                Some(s) => Ok(s),
-                None => Err(Error::Unexpected),
-            }?;
-            if filepath::is_dir(d_path) {
+        trace!("uninstalling pkg from root");
+        let files = path::get_stored_files(&self.name)?;
+        debug!("{:?}", files);
+        for entry in &files {
+            if filepath::is_dir(&entry) {
+                debug!("skipping dir {entry}");
                 continue;
             }
-            let name = filepath::base_name(d_path)?;
-            fs::remove_file(d_path)?;
-            fs::remove_file(path::root_file("bin", &name))?;
+            self.uninstall_entry(entry)?;
         }
+        Ok(())
+    }
+    pub fn uninstall_entry(&self, path: &str) -> Result<()> {
+        let rel = filepath::get_relative(&path::store_dir(&self.name), path)?;
+        debug!("found {}", rel);
+        let root_path = filepath::join(&*constants::ROOT_DIR, &rel);
+        if !filepath::exists(&root_path) {
+            debug!("root file not found {root_path}");
+            return Ok(());
+        }
+        msg::remove_file(&root_path);
+        std::fs::remove_file(&root_path)?;
+        Ok(())
+    }
+    pub fn cleanup_store(&self) -> Result<()> {
+        trace!("cleaning store");
+        let store_path = path::store_dir(&self.name); 
+        msg::remove_file(&store_path);
+        io::rmdir(&store_path)?;
+        Ok(())
+    }
+    pub fn cleanup_repo(&self) -> Result<()> {
+        trace!("cleaning repo");
+        let repo_path = path::repo(&self.name); 
+        msg::remove_file(&repo_path);
+        io::rmdir(&repo_path)?;
         Ok(())
     }
 }

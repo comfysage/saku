@@ -82,3 +82,7 @@ pub fn changelog(name: &str, path: &str) {
 pub fn link(target: &str, path: &str) {
     info!("{}", format!("linking {} to {}", general::path_f(path), general::path_f(target)))
 }
+
+pub fn remove_file(path: &str) {
+    info!("{}", format!("removing {}", general::path_f(path)))
+}
