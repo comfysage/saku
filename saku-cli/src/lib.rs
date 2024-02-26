@@ -7,6 +7,7 @@ pub mod install;
 pub mod add;
 pub mod remove;
 pub mod flask;
+pub mod uninstall;
 pub mod update;
 pub mod upgrade;
 pub mod list;

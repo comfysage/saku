@@ -224,8 +224,13 @@ fn main() -> Result<()> {
                 .into_iter()
                 .flatten()
                 .collect::<Vec<_>>();
-            println!("Removing {paths:?}");
-            Ok(())
+            if paths.len() < 1 {
+                return Err(make_err!(Missing, "not enough arguments provided"));
+            }
+            paths
+                .iter()
+                .map(|name| cli::uninstall::remove(name))
+                .collect()
         }
         Some(("update", sub_matches)) => {
             let urls = sub_matches
