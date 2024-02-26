@@ -7,11 +7,15 @@ use crate::util::msg;
 use crate::util::{filepath, path};
 
 impl Pkg {
+    /// run install task
+    /// - package files in store dir
+    /// - link stored files to root
     pub fn install_root(&self) -> Result<()> {
         self.store()?;
         self.link_root()?;
         Ok(())
     }
+    /// package files in store dir
     pub fn store(&self) -> Result<()> {
         trace!("storing files");
         let has_artifacts = !io::mkdir(path::store_dir(&self.name))?;
@@ -33,6 +37,7 @@ impl Pkg {
         exec::install(&self.name, &self.group)?;
         Ok(())
     }
+    /// link stored files to root
     pub fn link_root(&self) -> Result<()> {
         trace!("linking root");
         let files = path::get_stored_files(&self.name)?;
@@ -46,6 +51,7 @@ impl Pkg {
         }
         Ok(())
     }
+    /// link individual stored file to root
     pub fn link_entry(&self, path: &str) -> Result<()> {
         let rel = filepath::get_relative(&path::store_dir(&self.name), path)?;
         debug!("found {}", rel);
@@ -59,6 +65,7 @@ impl Pkg {
         io::link(&path, &root_path)?;
         Ok(())
     }
+    /// remove stored files in root
     pub fn uninstall_root(&self) -> Result<()> {
         trace!("uninstalling pkg from root");
         let files = path::get_stored_files(&self.name)?;
@@ -72,6 +79,7 @@ impl Pkg {
         }
         Ok(())
     }
+    /// remove individual stored file from root
     pub fn uninstall_entry(&self, path: &str) -> Result<()> {
         let rel = filepath::get_relative(&path::store_dir(&self.name), path)?;
         debug!("found {}", rel);
@@ -84,6 +92,7 @@ impl Pkg {
         std::fs::remove_file(&root_path)?;
         Ok(())
     }
+    /// remove store path for pkg
     pub fn cleanup_store(&self) -> Result<()> {
         trace!("cleaning store");
         let store_path = path::store_dir(&self.name); 
@@ -91,6 +100,7 @@ impl Pkg {
         io::rmdir(&store_path)?;
         Ok(())
     }
+    /// remove repo path for pkg
     pub fn cleanup_repo(&self) -> Result<()> {
         trace!("cleaning repo");
         let repo_path = path::repo(&self.name); 
