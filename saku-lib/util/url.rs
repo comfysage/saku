@@ -82,12 +82,12 @@ mod test {
     #[test]
     fn extend_url() -> Result<()> {
         assert_eq!(
-            super::extend_url("crispybaccoon/pkg")?,
-            "https://github.com/crispybaccoon/pkg"
+            super::extend_url("comfysage/pkg")?,
+            "https://github.com/comfysage/pkg"
         );
         assert_eq!(
-            super::extend_url("https://github.com/crispybaccoon/pkg")?,
-            "https://github.com/crispybaccoon/pkg"
+            super::extend_url("https://github.com/comfysage/pkg")?,
+            "https://github.com/comfysage/pkg"
         );
         assert_eq!(
             super::extend_url("aur.archlinux.org/pkg")?,
@@ -113,27 +113,27 @@ mod test {
         );
 
         assert_eq!(
-            super::shorten_url("https://github.com/crispybaccoon/pkg.git")?,
-            "crispybaccoon/pkg"
+            super::shorten_url("https://github.com/comfysage/pkg.git")?,
+            "comfysage/pkg"
         );
         assert_eq!(
-            super::shorten_url("github.com/crispybaccoon/pkg.git")?,
-            "crispybaccoon/pkg"
+            super::shorten_url("github.com/comfysage/pkg.git")?,
+            "comfysage/pkg"
         );
         assert_eq!(
-            super::shorten_url("github.com/crispybaccoon/pkg")?,
-            "crispybaccoon/pkg"
+            super::shorten_url("github.com/comfysage/pkg")?,
+            "comfysage/pkg"
         );
         assert_eq!(
-            super::shorten_url("crispybaccoon/pkg")?,
-            "crispybaccoon/pkg"
+            super::shorten_url("comfysage/pkg")?,
+            "comfysage/pkg"
         );
         Ok(())
     }
 
     #[test]
     fn url_name() -> Result<()> {
-        assert_eq!(super::url_name("crispybaccoon/core")?, "crispybaccoon.core");
+        assert_eq!(super::url_name("comfysage/core")?, "comfysage.core");
         assert_eq!(
             super::url_name("aur.archlinux.org/pkg")?,
             "aur.archlinux.org.pkg"

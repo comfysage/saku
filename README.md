@@ -33,7 +33,7 @@ Homebrew.
 Run the installer using curl:
 
 ```shell
-curl -fsSL https://github.com/crispybaccoon/saku/raw/mega/install.sh | sh
+curl -fsSL https://github.com/comfysage/saku/raw/mega/install.sh | sh
 ```
 
 Setup saku environment, add this to your `.bashrc`/`.zshrc`:
@@ -62,7 +62,7 @@ suggestions for improvements, or want to contribute new features, please submit
 a pull request or open an issue on the GitHub repository.
 
 Before contributing, please review the [contribution
-guidelines](https://github.com/crispybaccoon/saku/blob/main/CONTRIBUTING.md)
+guidelines](https://github.com/comfysage/saku/blob/main/CONTRIBUTING.md)
 for instructions on how to contribute code, report bugs, and more.
 
 ## License
@@ -77,4 +77,4 @@ contributors and the open-source community for their valuable contributions.
 ## Contact
 
 For any inquiries or questions, feel free to contact the project maintainer at
-[[67917529+CrispyBaccoon@users.noreply.github.com]].
+[[67917529+comfysage@users.noreply.github.com]].

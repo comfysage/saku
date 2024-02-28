@@ -29,7 +29,7 @@ pub struct Config {
 
 impl Config {
     pub fn path() -> Result<String> {
-        if let Some(path) = directories::ProjectDirs::from("dev", "crispybaccoon", "saku") {
+        if let Some(path) = directories::ProjectDirs::from("dev", "comfysage", "saku") {
             let dir = path.config_dir();
             let path = filepath::join(dir.to_str().ok_or(make_err!())?, &*constants::CONFIG_NAME);
             return Ok(path);

@@ -3,7 +3,7 @@ name = "saku"
 version = "0.1.0"
 edition = "2021"
 readme = "README.md"
-repository = "https://github.com/crispybaccoon/saku"
+repository = "https://github.com/comfysage/saku"
 license = "MIT OR Apache-2.0"
 
 [[bin]]

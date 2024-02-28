@@ -37,9 +37,9 @@ pub fn init() -> Result<()> {
     io::mkdir(path::gr("custom"))?;
 
     if !path::pkg_exists("flasks", "core") {
-        msg::fetch("core", "https://github.com/crispybaccoon/pkg");
+        msg::fetch("core", "https://github.com/comfysage/pkg");
 
-        flask::add_with_name("core", "crispybaccoon/pkg")?;
+        flask::add_with_name("core", "comfysage/pkg")?;
     }
 
     if !path::repo_exists("core") {

@@ -5,7 +5,7 @@ use crate::prelude::*;
 use crate::pkg::pkg::Pkg;
 
 // examples:
-// Flask({ name: "crispybaccoon.core", url: "crispybaccoon/core" }, "crispybaccoon/core")
+// Flask({ name: "comfysage.core", url: "comfysage/core" }, "comfysage/core")
 // Flask({ name: "aur.archlinux.org.pkg", url: "aur.archlinux.org/pkg" }, "aur.archlinux.org/pkg")
 
 #[derive(Debug)]
@@ -84,12 +84,12 @@ mod test {
 
     #[test]
     fn new() -> Result<()> {
-        let (name, url) = ("crispybaccoon.core", "crispybaccoon/core");
+        let (name, url) = ("comfysage.core", "comfysage/core");
         let flask = Flask::new(name, url)?;
         assert_eq!(flask.pkg().name, name);
         assert_eq!(flask.url(), url);
 
-        let (name, url) = ("core", "crispybaccoon/core");
+        let (name, url) = ("core", "comfysage/core");
         let flask = Flask::new(name, url)?;
         assert_eq!(flask.pkg().name, name);
         assert_eq!(flask.url(), url);
@@ -98,12 +98,12 @@ mod test {
     }
     #[test]
     fn from_url() -> Result<()> {
-        let (name, url) = ("crispybaccoon.core", "crispybaccoon/core");
+        let (name, url) = ("comfysage.core", "comfysage/core");
         let flask = Flask::from_url(url)?;
         assert_eq!(flask.pkg().name, name);
         assert_eq!(flask.url(), url);
 
-        let (name, url) = ("crispybaccoon.core", "crispybaccoon/core");
+        let (name, url) = ("comfysage.core", "comfysage/core");
         let flask = Flask::from_url(url)?;
         assert_eq!(flask.pkg().name, name);
         assert_eq!(flask.url(), url);
@@ -112,7 +112,7 @@ mod test {
     }
     #[test]
     fn from_pkg() -> Result<()> {
-        let (name, url) = ("crispybaccoon.core", "crispybaccoon/core");
+        let (name, url) = ("comfysage.core", "comfysage/core");
         let flask = Flask::new(name, url)?;
         assert_eq!(flask.pkg().name, name);
         assert_eq!(flask.url(), url);
@@ -122,7 +122,7 @@ mod test {
         assert_eq!(flask_pkg.pkg().name, name);
         assert_eq!(flask_pkg.url(), url);
 
-        let (name, url) = ("core", "crispybaccoon/core");
+        let (name, url) = ("core", "comfysage/core");
         let flask = Flask::new(name, url)?;
         assert_eq!(flask.pkg().name, name);
         assert_eq!(flask.url(), url);
