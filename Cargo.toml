@@ -1,3 +1,5 @@
+workspace = { members = [ "saku-lib", "saku-cli", "log", ] }
+
 [package]
 name = "saku"
 version = "0.1.0"
