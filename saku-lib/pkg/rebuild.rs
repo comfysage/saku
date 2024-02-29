@@ -47,11 +47,14 @@ impl Node {
         if self.is_bud() {
             return Ok(());
         }
-        for entry in std::fs::read_dir(&self.abs())? {
-            let entry = entry?;
-            let path_bind = entry.path();
-            let path = path_bind.to_str().ok_or(make_err!())?;
-            let child = self.create(path)?;
+        for entry in std::fs::read_dir(&self.abs())?
+            .into_iter()
+            .flatten()
+            .map(|x| x.path())
+            .map(|x| x.to_str().map(|x| x.to_string()))
+            .flatten()
+        {
+            let child = self.create(&entry)?;
             self.children.push(child);
         }
         Ok(())
