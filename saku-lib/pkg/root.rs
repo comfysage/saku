@@ -1,10 +1,10 @@
+use crate::pkg::rebuild::Root;
 use crate::prelude::*;
 use crate::exec;
 use crate::pkg::pkg::Pkg;
-use crate::util::constants;
 use crate::util::io;
 use crate::util::msg;
-use crate::util::{filepath, path};
+use crate::util::path;
 
 impl Pkg {
     /// run install task
@@ -40,56 +40,13 @@ impl Pkg {
     /// link stored files to root
     pub fn link_root(&self) -> Result<()> {
         trace!("linking root");
-        let files = path::get_stored_files(&self.name)?;
-        debug!("{:?}", files);
-        for entry in &files {
-            if filepath::is_dir(&entry) {
-                debug!("skipping dir {entry}");
-                continue;
-            }
-            self.link_entry(entry)?;
-        }
-        Ok(())
-    }
-    /// link individual stored file to root
-    pub fn link_entry(&self, path: &str) -> Result<()> {
-        let rel = filepath::get_relative(&path::store_dir(&self.name), path)?;
-        debug!("found {}", rel);
-        let root_path = filepath::join(&*constants::ROOT_DIR, &rel);
-        if filepath::exists(&root_path) {
-            debug!("root file already exists {root_path}. cleaning up");
-            std::fs::remove_file(&root_path)?;
-        }
-        io::mkdir(filepath::parent_dir(&root_path)?)?;
-        msg::link(&path, &root_path);
-        io::link(&path, &root_path)?;
+        Root::new(&self)?.build()?.link()?;
         Ok(())
     }
     /// remove stored files in root
     pub fn uninstall_root(&self) -> Result<()> {
         trace!("uninstalling pkg from root");
-        let files = path::get_stored_files(&self.name)?;
-        debug!("{:?}", files);
-        for entry in &files {
-            if filepath::is_dir(&entry) {
-                debug!("skipping dir {entry}");
-                continue;
-            }
-            self.uninstall_entry(entry)?;
-        }
-        Ok(())
-    }
-    /// remove individual stored file from root
-    pub fn uninstall_entry(&self, path: &str) -> Result<()> {
-        let rel = filepath::get_relative(&path::store_dir(&self.name), path)?;
-        debug!("found {}", rel);
-        let root_path = filepath::join(&*constants::ROOT_DIR, &rel);
-        if !filepath::exists(&root_path) {
-            debug!("root file not found {root_path}");
-            return Ok(());
-        }
-        msg::remove_file(&root_path);
-        std::fs::remove_file(&root_path)?;
+        Root::new(&self)?.build()?.uninstall()?;
         Ok(())
     }
     /// remove store path for pkg
