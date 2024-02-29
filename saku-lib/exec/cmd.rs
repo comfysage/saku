@@ -1,54 +1,45 @@
-use std::path::Path;
-
-use crate::util;
 use crate::prelude::*;
 
-pub fn clone_cmd(url: &str, out: &str) -> String {
-  format!("git clone --filter=blob:none {} {}", url, out)
+use util::constants;
+use util::path;
+
+use super::run::run;
+
+pub enum Cmd {
+    Clone { url: String, name: String },
+    Fetch { name: String },
+    Pull { name: String },
+    Log { name: String },
+    Link { target: String, path: String },
+    Unlink { path: String },
 }
 
-pub fn fetch_cmd() -> Vec<String> {
-  vec!["git fetch -q".to_string(), "git checkout -q".to_string()]
-}
-
-pub fn pull_cmd() -> Vec<String> {
-  vec!["git pull".to_string()]
-}
-
-pub fn log_cmd() -> String {
-  "git -c pager.show=false show --format=' - %C(yellow)%h%C(reset) %<(80,trunc)%s' -q @@{1}..@@{0}".to_string()
-}
-
-pub fn install_cmd(src: &str, dst: &str, perm: i64) -> String {
-  let mode = perm.to_string();
-  format!("install -m {mode} {src} {dst}")
-}
-
-pub fn root_cmd(name: &str, path: &str, prefix: &str) -> Result<String> {
-  if path.len()  == 0 || prefix.len() == 0 {
-    return Err(Error::Missing("root struct has missing properties".to_string()))
-  }
-
-  let src = util::path::repo_file(&name, &path);
-  let dst = util::path::root_file(&prefix, &path);
-
-  if !Path::new(&src).exists() {
-   return  Err(Error::NotFound(format!("root file '{}' not found", src)))
-  }
-
-  // create util::path_root_dir(prefix) directory
-
-  if prefix == "bin" {
-    return Ok(install_cmd(&src, &dst, 0755))
-  } else {
-    return Ok(install_cmd(&src, &dst, 0644))
-  }
-}
-
-pub fn ln_cmd(target: &str, file: &str) -> String {
-    format!("ln -s {target} {file}")
-}
-
-pub fn curl_cmd(url: &str, file: &str) -> String {
-    format!("curl -fsSL {url} -o {file}")
+impl Cmd {
+    pub fn get_cmd(&self) -> Vec<String> {
+        match self {
+            Cmd::Clone { url, name } => vec![format!(
+                "git clone --filter=blob:none {} {}",
+                url,
+                path::repo(name)
+            )],
+            Cmd::Fetch { .. } => vec!["git fetch -q".to_string(), "git checkout -q".to_string()],
+            Cmd::Pull { .. } => vec!["git pull".to_string()],
+            Cmd::Log { .. } => vec!["git -c pager.show=false show --format=' - %C(yellow)%h%C(reset) %<(80,trunc)%s' -q @@{1}..@@{0}".to_string()],
+            Cmd::Link { target, path } => vec![format!("ln -s {target} {path}")],
+            Cmd::Unlink { path } => vec![format!("unlink {path}")],
+        }
+    }
+    pub fn get_pwd(&self) -> String {
+        match self {
+            Cmd::Clone { .. } => constants::REPO_DIR.to_string(),
+            Cmd::Fetch { name } => path::repo(name),
+            Cmd::Pull { name } => path::repo(name),
+            Cmd::Log { name } => path::repo(name),
+            Cmd::Link { .. } => constants::SAKU_DIR.to_string(),
+            Cmd::Unlink { .. } => constants::SAKU_DIR.to_string(),
+        }
+    }
+    pub fn exec(self) -> Result<()> {
+        run(self.get_cmd(), &self.get_pwd())
+    }
 }

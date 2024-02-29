@@ -24,7 +24,7 @@ impl Pkg {
             let files = path::get_stored_bin(&self.name)?;
             for entry in files {
                 debug!("removing artifact {}", msg::general::path_f(&entry));
-                exec::unlink(&entry)?;
+                exec::Cmd::Unlink{ path: entry }.exec()?;
             }
             let store_path = path::store_dir(&self.name);
             let dirs = path::get_artifact_dirs(&self.name)?;

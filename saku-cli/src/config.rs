@@ -13,7 +13,7 @@ fn create_root() -> Result<()> {
     io::mkdir(path::root_dir("share"))?;
 
     if !path::exists(&path::root_dir("share/man")) {
-        exec::run_in_root("share", vec![exec::cmd::ln_cmd("../man", "man")])?;
+        exec::Cmd::Link { target: "../man".to_string(), path: path::root_dir("share/man") }.exec()?;
     }
     Ok(())
 }

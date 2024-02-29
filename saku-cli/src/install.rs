@@ -22,7 +22,7 @@ pub fn clone_pkg(p: &Pkg) -> Result<()> {
 
     msg::clone(&p.name, &p.url);
 
-    exec::clone(&p.url, &p.name)?;
+    exec::Cmd::Clone{ url: p.url.clone(), name: p.name.clone() }.exec()?;
 
     Ok(())
 }

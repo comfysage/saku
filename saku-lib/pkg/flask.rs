@@ -69,9 +69,9 @@ impl Flask {
     pub fn update(&self) -> Result<()> {
         let name = &self.name();
         if path::repo_exists(name) {
-            exec::pull(name)
+            exec::Cmd::Pull{ name: name.to_string() }.exec()
         } else {
-            exec::clone(&self.full_url()?, name)
+            exec::Cmd::Clone{ url: self.full_url()?, name: name.to_string() }.exec()
         }
     }
 }

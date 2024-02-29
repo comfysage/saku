@@ -7,7 +7,7 @@ use saku_lib::util::path;
 pub fn changelog(name: &str) -> Result<()> {
     msg::changelog(name, &path::repo(name));
 
-    exec::changelog(name)?;
+    exec::Cmd::Log{ name: name.to_string() }.exec()?;
 
     Ok(())
 }
