@@ -91,8 +91,5 @@ pub fn parent_dir(path: &str) -> Result<String> {
 pub fn get_relative(root: &str, path: &str) -> Result<String> {
     let path: String = abs(path)?;
     let rel = path.trim_start_matches(&format!("{root}/")).to_string();
-    if rel == path {
-        return Err(make_err!());
-    }
     Ok(rel)
 }
