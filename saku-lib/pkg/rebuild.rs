@@ -40,8 +40,28 @@ impl Node {
         child.build()?;
         Ok(child)
     }
+    fn push(&mut self, path: &str) -> Result<()> {
+        let child = self.create(path)?;
+        self.children.push(child);
+        Ok(())
+    }
     fn abs(&self) -> String {
         filepath::join(&self.store_dir, &self.path)
+    }
+    pub fn has(&self, rel: &str) -> Result<bool> {
+        if self.path == rel {
+            debug!("{} has {:?}", self.store_dir, rel);
+            return Ok(true);
+        }
+        if self.path.is_empty() || rel.find(&self.path) == Some(0) {
+            debug!("{} contains {:?}", self.path, rel);
+            for child in &self.children {
+                if child.has(rel)? {
+                    return Ok(true);
+                }
+            }
+        }
+        Ok(false)
     }
     pub fn build(&mut self) -> Result<()> {
         if self.is_bud() {
@@ -54,8 +74,7 @@ impl Node {
             .map(|x| x.to_str().map(|x| x.to_string()))
             .flatten()
         {
-            let child = self.create(&entry)?;
-            self.children.push(child);
+            self.push(&entry)?;
         }
         Ok(())
     }
@@ -63,39 +82,35 @@ impl Node {
         let is_dir = filepath::is_dir(&self.abs());
         !is_dir
     }
-    /// link node that is not a bud
-    fn link_as_parent(&self, root: &Node) -> Result<()> {
-        let rel = &self.path;
-        let root_path = filepath::join(&root.path, &rel);
-        if !filepath::exists(&root_path) {
-            self.link_bud(&root_path)?;
-            return Ok(());
-        }
-        debug!("({root_path}) root target already exists; skipping");
-        for child in self.children.iter() {
-            child.link(root)?;
-        }
-        Ok(())
-    }
     /// link node to root
     pub fn link(&self, root: &Node) -> Result<()> {
-        trace!("({}) current node", &self.path);
-        if !self.is_bud() {
-            self.link_as_parent(root)?;
-            return Ok(());
+        trace!("({:?}) current node", &self.path);
+        let path = filepath::join(&root.store_dir, &self.path);
+        if self.is_bud() {
+            if filepath::exists(&path) {
+                msg::remove_file(&path);
+                std::fs::remove_file(&path)?;
+            }
+            self.link_bud(root)?;
+        } else {
+            if root.has(&self.path)? {
+                for child in &self.children {
+                    child.link(root)?;
+                }
+            } else {
+                if filepath::exists(&path) {
+                    msg::remove_file(&path);
+                    std::fs::remove_file(&path)?;
+                }
+                self.link_bud(root)?;
+            }
         }
-        let rel = &self.path;
-        let root_path = filepath::join(&root.path, &rel);
-        if filepath::exists(&root_path) {
-            debug!("({root_path}) root file already exists; cleaning up");
-            std::fs::remove_file(&root_path)?;
-        }
-        self.link_bud(&root_path)?;
         Ok(())
     }
-    fn link_bud(&self, path: &str) -> Result<()> {
+    fn link_bud(&self, root: &Node) -> Result<()> {
+        let path = filepath::join(&root.store_dir, &self.path);
         if filepath::exists(&path) {
-            return Err(make_err!(IO, "file already exists"));
+            return Err(make_err!(IO, "file already exists {path}"));
         }
         io::mkdir(filepath::parent_dir(&path)?)?;
         msg::link(&self.abs(), &path);
@@ -105,7 +120,7 @@ impl Node {
 
     fn has_linked(&self, root: &Node) -> Result<bool> {
         let rel = &self.path;
-        let root_path = filepath::join(&root.path, &rel);
+        let root_path = filepath::join(&root.store_dir, &rel);
         if filepath::exists(&root_path) {
             let metadata = std::fs::symlink_metadata(&root_path)?;
             let filetype = metadata.file_type();
@@ -118,7 +133,7 @@ impl Node {
         trace!("({}) current node", &self.path);
         if self.has_linked(root)? {
             let rel = &self.path;
-            let root_path = filepath::join(&root.path, &rel);
+            let root_path = filepath::join(&root.store_dir, &rel);
             msg::remove_file(&root_path);
             std::fs::remove_file(&root_path)?;
             return Ok(());
